@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AndroidAppProject</string>
+
+    <string name="get_latest_news_api">http://166.111.68.66:2042/news/action/query/latest</string>
+    <string name="search_news_api">http://166.111.68.66:2042/news/action/query/search</string>
+    <string name="get_news_detail_api">http://166.111.68.66:2042/news/action/query/detail</string>
 </resources>
