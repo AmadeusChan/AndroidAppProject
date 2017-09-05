@@ -1,12 +1,17 @@
 package com.java.a31.androidappproject.models;
 
+import android.graphics.Bitmap;
+
+import java.util.List;
+
 /**
  * Created by amadeus on 9/3/17.
  */
 
 public class NewsIntroduction implements INewsIntroduction{
     private String classTag, ID, source, title, time, URL, author, language, videos, introduction;
-    private boolean isReadFlag;
+    private boolean isReadFlag, isFavoriteFlag;
+    private List<Bitmap> images;
 
     public void setClassTag(String classTag) {
         this.classTag = classTag;
@@ -44,12 +49,20 @@ public class NewsIntroduction implements INewsIntroduction{
         this.videos = videos;
     }
 
+    public void setImages(List<Bitmap> images) {
+        this.images = images;
+    }
+
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
     }
 
     public void setReadFlag(boolean readFlag) {
         isReadFlag = readFlag;
+    }
+
+    public void setFavoriteFlag(boolean favoriteFlag) {
+        isFavoriteFlag = favoriteFlag;
     }
 
     @Override
@@ -105,5 +118,15 @@ public class NewsIntroduction implements INewsIntroduction{
     @Override
     public boolean isRead() {
         return isReadFlag;
+    }
+
+    @Override
+    public boolean isFavorite() {
+        return isFavoriteFlag;
+    }
+
+    @Override
+    public List<Bitmap> getImages() {
+        return images;
     }
 }
