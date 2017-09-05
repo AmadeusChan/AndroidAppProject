@@ -90,7 +90,14 @@ public class NewsList implements INewsList {
                                     news.setImages(null);
                                     news.setFavoriteFlag(false);
                                     news.setReadFlag(false);
-                                    list.add(news);
+
+                                    if (filter!=null) {
+                                        if (filter.accept(news)) {
+                                            list.add(news);
+                                        }
+                                    } else {
+                                        list.add(news);
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -112,8 +119,6 @@ public class NewsList implements INewsList {
         RequestQueue queue= Volley.newRequestQueue(context);
         queue.add(request);
     }
-
-
 
     @Override
     public void setFilter(INewsFilter filter) {

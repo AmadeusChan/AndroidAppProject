@@ -26,7 +26,7 @@ public class NewsManager implements INewsManager {
 
     @Override
     public INewsList getLatestNews(int mode) {
-        return null;
+        return new NewsList(context);
     }
 
     @Override

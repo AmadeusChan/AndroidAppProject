@@ -22,9 +22,10 @@ public class NewsListTest {
         newsList.getMore(20, 1, new INewsListener<List<INewsIntroduction>>() {
             @Override
             public void getResult(List<INewsIntroduction> result) {
+                Log.d("getResult:", "result!");
                 if (result==null) {
                     System.out.println("BOMB!");
-                }
+                } else
                 for (int i=0; i<result.size(); ++i) {
                     Log.d("title:", result.get(i).getTitle());
                 }
