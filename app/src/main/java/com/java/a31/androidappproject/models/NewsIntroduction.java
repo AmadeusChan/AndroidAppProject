@@ -49,12 +49,20 @@ public class NewsIntroduction implements INewsIntroduction{
         this.videos = videos;
     }
 
+    public void setImages(List<Bitmap> images) {
+        this.images = images;
+    }
+
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
     }
 
     public void setReadFlag(boolean readFlag) {
         isReadFlag = readFlag;
+    }
+
+    public void setFavoriteFlag(boolean favoriteFlag) {
+        isFavoriteFlag = favoriteFlag;
     }
 
     @Override

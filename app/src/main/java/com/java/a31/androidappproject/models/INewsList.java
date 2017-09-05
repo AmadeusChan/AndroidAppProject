@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface INewsList {
     void reset();
-    List<INewsIntroduction> getMore(int size);
+    void getMore(int size, int pageNo, INewsListener<List<INewsIntroduction>> listener);
     void setFilter(INewsFilter filter);
 }
