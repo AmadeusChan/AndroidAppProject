@@ -18,7 +18,7 @@ public class NewsListTest {
     public void getMore() throws Exception {
         Log.d("Hello", "Test getMore()");
         Context context=InstrumentationRegistry.getContext();
-        INewsList newsList=new NewsList(context);
+        INewsList newsList=new NewsList(context, INews.NORMAL_MODE);
         newsList.getMore(20, 1, new INewsListener<List<INewsIntroduction>>() {
             @Override
             public void getResult(List<INewsIntroduction> result) {
@@ -28,9 +28,11 @@ public class NewsListTest {
                 } else
                 for (int i=0; i<result.size(); ++i) {
                     Log.d("title:", result.get(i).getTitle());
+                    Log.d("images", result.get(i).getImages().toString());
                 }
             }
         });
+        while (true);
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public class NewsIntroduction implements INewsIntroduction{
     private String classTag, ID, source, title, time, URL, author, language, videos, introduction;
     private boolean isReadFlag, isFavoriteFlag;
-    private List<Bitmap> images;
+    private List<String> images;
 
     public void setClassTag(String classTag) {
         this.classTag = classTag;
@@ -49,7 +49,7 @@ public class NewsIntroduction implements INewsIntroduction{
         this.videos = videos;
     }
 
-    public void setImages(List<Bitmap> images) {
+    public void setImages(List<String> images) {
         this.images = images;
     }
 
@@ -126,7 +126,7 @@ public class NewsIntroduction implements INewsIntroduction{
     }
 
     @Override
-    public List<Bitmap> getImages() {
+    public List<String> getImages() {
         return images;
     }
 }

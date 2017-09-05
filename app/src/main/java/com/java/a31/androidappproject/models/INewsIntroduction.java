@@ -19,7 +19,12 @@ public interface INewsIntroduction extends INews {
     String getLanguage();
     String getVideos();
     String getIntroduction();
+
+    /**
+     *
+     * @return 返回图片的URL列表
+     */
+    List<String> getImages();
     boolean isRead();
     boolean isFavorite();
-    List<Bitmap> getImages();
 }

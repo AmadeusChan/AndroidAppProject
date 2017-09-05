@@ -24,6 +24,8 @@ import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by amadeus on 9/5/17.
@@ -33,12 +35,19 @@ public class NewsList implements INewsList {
     private final int PAGE_SIZE=100;
 
     private HashSet<String> showedNews=new HashSet<String>();
-    private INewsFilter filter=null;
+    protected INewsFilter filter=new INewsFilter() {
+        @Override
+        public boolean accept(INewsIntroduction newsIntroduction) {
+            return true;
+        }
+    };
     private int currentPageNumber=1;
     private Context context; // attention!!
+    private int mode;
 
-    public NewsList(Context context) {
+    public NewsList(Context context, int mode) {
         this.context=context;
+        this.mode=mode;
     }
 
     private boolean getNetworkState() {
@@ -87,7 +96,20 @@ public class NewsList implements INewsList {
                                     news.setVideos(jo.getString("news_Video"));
                                     news.setIntroduction(jo.getString("news_Intro"));
 
-                                    news.setImages(null);
+                                    String str=jo.getString("news_Pictures");
+                                    Log.d("get", str);
+                                    if (mode==INews.TEXT_ONLY_MODE) {
+                                        news.setImages(new ArrayList<String>());
+                                    } else {
+                                        ArrayList<String> images=new ArrayList<String>();
+                                        Pattern p=Pattern.compile("http.*?(jpg|jpeg|png|gif)");
+                                        Matcher matcher=p.matcher(str);
+                                        while (matcher.find()) {
+                                            images.add(matcher.group());
+                                        }
+                                        news.setImages(images);
+                                    }
+
                                     news.setFavoriteFlag(false);
                                     news.setReadFlag(false);
 

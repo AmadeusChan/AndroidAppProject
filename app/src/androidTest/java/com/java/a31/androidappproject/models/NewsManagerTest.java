@@ -41,7 +41,24 @@ public class NewsManagerTest {
 
     @Test
     public void getNewsDetails() throws Exception {
-
+        Log.d("go: ", "getNewsDetails()");
+        Context context=InstrumentationRegistry.getContext();
+        String ID="201609130413080e91293fb5402b80437a65970fcb7d";
+        int mode=INews.NORMAL_MODE;
+        NewsManager.getInstance(context).getNewsDetails(ID, mode, new INewsListener<INewsDetail>() {
+            @Override
+            public void getResult(INewsDetail result) {
+                Log.d("go: ","result got!");
+                if (result!=null) {
+                    Log.d("persons: ", result.getPersons().toString());
+                    Log.d("locations: ", result.getLocations().toString());
+                    Log.d("keyWords: ", result.getKeyWords().toString());
+                    Log.d("images: ", result.getImages().toString());
+                    Log.d("Content: ", result.getContent());
+                }
+            }
+        });
+        while (true);
     }
 
     @Test
