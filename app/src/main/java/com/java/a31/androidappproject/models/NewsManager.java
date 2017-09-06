@@ -3,12 +3,11 @@ package com.java.a31.androidappproject.models;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.speech.tts.TextToSpeech;
-import android.util.Log;
+
+import com.java.a31.androidappproject.models.database.MyDBHelper;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by amadeus on 9/5/17.
@@ -17,8 +16,9 @@ import java.util.Locale;
 
 public class NewsManager {
     private static NewsManager instance=null;
-    private Context context;
-    MediaPlayer mediaPlayer;
+    private Context context; // This reference should points to you MainActivity.getApplicationContext()
+    private MediaPlayer mediaPlayer;
+    private MyDBHelper myDBHelper;
     /*
     private TextToSpeech tts;
     private int tts_cnt;
@@ -26,6 +26,7 @@ public class NewsManager {
 
     private NewsManager(Context context) {
         this.context=context;
+        myDBHelper=new MyDBHelper(context);
 
         /*
         // to initialize tts
@@ -43,6 +44,7 @@ public class NewsManager {
 
     /**
      * 该类的功能是返回一个NewsManager类的实例
+     * ATTENTION! In order to avoid possible memory leaking, the argument context here should be Context.getApplicationContext()
      */
     public static synchronized NewsManager getInstance(Context context) {
         if (instance==null) {
@@ -114,15 +116,15 @@ public class NewsManager {
     }
 
     public List<String> getCategoryList() {
-        return null;
+        return myDBHelper.getCategoryList();
     }
 
     public void addCategory(String category) {
-
+        myDBHelper.insertCategory(category);
     }
 
     public void deleteCategory(String category) {
-
+        myDBHelper.deleteCategory(category);
     }
 
 }

@@ -88,7 +88,12 @@ public class NewsManagerTest {
 
     @Test
     public void getCategoryList() throws Exception {
-
+        Context context=InstrumentationRegistry.getContext();
+        //NewsManager.getInstance(context);
+        List<String> list=NewsManager.getInstance(context).getCategoryList();
+        for (String str: list) {
+            Log.d("category", str);
+        }
     }
 
     @Test

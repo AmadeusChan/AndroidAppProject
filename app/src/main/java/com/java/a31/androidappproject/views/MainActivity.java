@@ -1,5 +1,6 @@
 package com.java.a31.androidappproject.views;
 
+import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -37,6 +38,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        /*
+        Context context=getApplicationContext();
+        //NewsManager.getInstance(context);
+        NewsManager newsManager=NewsManager.getInstance(getApplicationContext());
+        newsManager.deleteCategory("国际");
+        newsManager.addCategory("娱乐");
+        newsManager.deleteCategory("财经");
+        TextView tv=(TextView) findViewById(R.id.text_view);
+        List<String> list=NewsManager.getInstance(context).getCategoryList();
+        String text="";
+        for (String str: list) {
+            Log.d("locate", str);
+            text=text+str+"\n";
+        }
+        tv.setText(text);
+        */
 
     }
 
