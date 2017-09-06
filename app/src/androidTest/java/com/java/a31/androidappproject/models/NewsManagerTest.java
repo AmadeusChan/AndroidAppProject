@@ -78,7 +78,12 @@ public class NewsManagerTest {
 
     @Test
     public void speakText() throws Exception {
-
+        Context context=InstrumentationRegistry.getContext();
+        String text="你好，世界";
+        NewsManager.getInstance(context).speakText(text);
+        text="据俄罗斯新闻频道8月7日消息，德国《世界报》评论俄罗斯在里约奥运会获得其首枚金牌时称，俄罗斯柔道选手夺得金牌与俄罗斯总统弗拉基米尔·普京密切相关。 　　文章称，俄首枚金牌得主、柔道运动员穆德拉诺夫不止一次与俄罗斯总统弗拉基米尔·普京一起训练。柔道正是普京喜欢的体育运动，因此此次夺冠对俄罗斯来说非常重要。报道还提到，普京作为国际柔道联合会荣誉主席，已获柔道8段。";
+        NewsManager.getInstance(context).speakText(text);
+        while (true);
     }
 
     @Test
