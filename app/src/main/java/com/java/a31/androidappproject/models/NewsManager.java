@@ -1,8 +1,14 @@
 package com.java.a31.androidappproject.models;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by amadeus on 9/5/17.
@@ -12,9 +18,27 @@ import java.util.List;
 public class NewsManager {
     private static NewsManager instance=null;
     private Context context;
+    MediaPlayer mediaPlayer;
+    /*
+    private TextToSpeech tts;
+    private int tts_cnt;
+    */
 
     private NewsManager(Context context) {
         this.context=context;
+
+        /*
+        // to initialize tts
+        tts=new TextToSpeech(context, new TextToSpeech.OnInitListener(){
+            @Override
+            public void onInit(int i) {
+                if (i!=TextToSpeech.ERROR) {
+                    tts.setLanguage(Locale.CHINA);
+                }
+            }
+        });
+        tts_cnt=0;
+        */
     }
 
     /**
@@ -68,8 +92,25 @@ public class NewsManager {
         return null;
     }
 
+    /**
+     * 该方法将调用在线的TTS API将文字转成语音进行播放
+     * @param text 要转成语音的文字
+     */
     public void speakText(String text) {
-
+        String url = "http://api.voicerss.org/?key=812c49b5fc504ea59f257d3f120a822f&hl=zh-cn&src="+text;
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        try {
+            mediaPlayer.setDataSource(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            mediaPlayer.prepare(); // might take long! (for buffering, etc)
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.start();
     }
 
     public List<String> getCategoryList() {
