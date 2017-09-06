@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.java.a31.androidappproject.models.INewsDetail;
+import com.java.a31.androidappproject.models.INewsList;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +31,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public static final String FAVORITE_COLUMN_NEWS_ID="news_id";
     public static final String FAVORITE_COLUMN_NEWS_CONTENT="news_content";
 
+    private Context context;
+
     public MyDBHelper(Context context) {
         super(context, DATABASE_NAME, null, 3);
+        this.context=context;
         Log.d("locate", "constructor");
     }
 
@@ -128,4 +134,21 @@ public class MyDBHelper extends SQLiteOpenHelper {
         }
         return list;
     }
+
+    public boolean insertFavoriteNews(INewsDetail newsDetail) {
+        if (FavoriteNewsManager.isInFavoriteList(newsDetail.getID(), this.getReadableDatabase())) return false;
+        SQLiteDatabase sqLiteDatabase=this.getWritableDatabase();
+        return FavoriteNewsManager.addFavoriteNews(newsDetail, sqLiteDatabase);
+    }
+
+    public boolean deleteFavoriteNews(String ID) {
+        SQLiteDatabase sqLiteDatabase=this.getWritableDatabase();
+        return FavoriteNewsManager.deleteFavoriteNews(ID, sqLiteDatabase);
+    }
+
+    public INewsList getFavoriteNewsList() {
+        SQLiteDatabase sqLiteDatabase=this.getReadableDatabase();
+        return FavoriteNewsManager.getFavoriteNewsList(sqLiteDatabase);
+    }
+
 }

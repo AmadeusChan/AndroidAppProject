@@ -9,6 +9,7 @@ import java.util.List;
  */
 
 public interface INewsIntroduction extends INews {
+
     String getClassTag();
     String getID();
     String getSource();
