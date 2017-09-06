@@ -82,16 +82,28 @@ public class NewsManager {
         NewsDetailFetcherFromInternet.fetchDetail(ID, context, mode, listener);
     }
 
-    public void setAsFavorite(String ID) {
-
+    /**
+     * 收藏某条新闻
+     * @param newsDetail 要收藏的新闻
+     */
+    public void setAsFavorite(INewsDetail newsDetail) {
+        myDBHelper.insertFavoriteNews(newsDetail);
     }
 
-    public void setAsNotFavorite(String ID) {
-
+    /**
+     * 取消某条新闻的收藏
+     * @param newsDetail 要被取消收藏的新闻
+     */
+    public void setAsNotFavorite(INewsDetail newsDetail) {
+        myDBHelper.deleteFavoriteNews(newsDetail.getID());
     }
 
+    /**
+     * 获得收藏的新闻列表
+     * @return 收藏的新闻列表
+     */
     public INewsList getFavoriteNews() {
-        return null;
+        return myDBHelper.getFavoriteNewsList();
     }
 
     /**
