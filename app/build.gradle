@@ -19,12 +19,29 @@ android {
     }
 }
 
+ext {
+    supportLibVersion = '26.+'
+    butterKnifeVersion = '8.8.1'
+    retrofitVersion = '2.3.0'
+    glideVersion = '4.0.0'
+    baseRecyclerViewAdapterHelperVersion = '2.9.28'
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.+'
+
+    /**
+     * @see <a href="https://developer.android.com/topic/libraries/support-library/index.html">Android support library</a>
+     */
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support:support-v4:${supportLibVersion}"
+    compile "com.android.support:preference-v14:${supportLibVersion}"
+
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
@@ -41,4 +58,21 @@ dependencies {
     androidTestCompile ('com.android.support.test:rules:0.5') {
         exclude module: 'support-annotations'
     }
+
+    /**
+     * @see <a href="http://jakewharton.github.io/butterknife/">Butter Knife</a>
+     */
+    compile "com.jakewharton:butterknife:${butterKnifeVersion}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterKnifeVersion}"
+
+    /**
+     * @see <a href="http://www.recyclerview.org/">BaseRecyclerViewAdapterHelper</a>
+     */
+    compile "com.github.CymChad:BaseRecyclerViewAdapterHelper:${baseRecyclerViewAdapterHelperVersion}"
+
+    /**
+     * @see <a href="https://github.com/bumptech/glide">Glide</a>
+     */
+    compile "com.github.bumptech.glide:glide:${glideVersion}"
+    annotationProcessor "com.github.bumptech.glide:compiler:${glideVersion}"
 }

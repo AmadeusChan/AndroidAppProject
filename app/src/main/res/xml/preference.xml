@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/preference">
+
+        <SwitchPreferenceCompat
+            android:title="@string/no_image_mode"
+            android:key="no_image_mode"
+            android:defaultValue="false"
+            android:summary="@string/no_image_mode_desc" />
+
+        <SwitchPreferenceCompat
+            android:title="@string/night_mode"
+            android:key="night_mode"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/about">
+
+        <Preference android:title="@string/version" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/authors">
+
+        <Preference android:title="@string/contributors"
+            android:key="contributors"
+            android:summary="@string/contributors_desc" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
