@@ -134,7 +134,15 @@ public class NewsListFragment extends Fragment implements NewsListContract.View,
 
     @Override
     public void onFailure() {
+        if (mPage == 1) {
+            hideProgress();
 
+            mNewsListAdapter.setEnableLoadMore(true);
+        } else {
+            mSwipeRefreshLayout.setEnabled(true);
+
+            mNewsListAdapter.loadMoreFail();
+        }
     }
 
     @Override

@@ -46,7 +46,11 @@ public class NewsListPresenter implements NewsListContract.Presenter, INewsListe
 
     @Override
     public void getResult(List<INewsIntroduction> newsList) {
-        mView.onSuccess(newsList);
+        if (newsList.size() > 0) {
+            mView.onSuccess(newsList);
+        } else {
+            mView.onFailure();
+        }
     }
 
 }

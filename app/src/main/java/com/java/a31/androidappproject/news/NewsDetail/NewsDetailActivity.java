@@ -9,6 +9,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.models.INewsDetail;
+import com.java.a31.androidappproject.models.NewsManager;
+import com.java.a31.androidappproject.models.NewsManagerNotInitializedException;
 
 import java.util.List;
 
@@ -49,11 +52,15 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
 
+    private static final String TAG = "NewsDetailActivity";
+
     private static final String KEY_NEWS_ID = "NEWS_ID";
 
     private String mNewsId;
 
     private NewsDetailContract.Presenter mPresenter;
+
+    private INewsDetail mNewsDetail;
 
     public static void start(Context context, String newsId) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
@@ -82,8 +89,11 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
                 mNestedScrollView.smoothScrollTo(0, 0);
             }
         });
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPresenter.loadNewsDetail(mNewsId);
+
     }
 
     @Override
@@ -96,9 +106,24 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.share:
                 return true;
             case R.id.star:
+                try {
+                    NewsManager.getInstance().setAsFavorite(mNewsDetail);
+                } catch (NewsManagerNotInitializedException e) {
+                    Log.e(TAG, "onOptionsItemSelected", e);
+                }
+                return true;
+            case  R.id.read:
+                try {
+                    NewsManager.getInstance().speakText(mNewsDetail.getContent());
+                } catch (NewsManagerNotInitializedException e) {
+                    Log.e(TAG, "onOptionsItemSelected", e);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -107,12 +132,13 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
     @Override
     public void onSuccess(INewsDetail newsDetail) {
-        newsTitleView.setText(newsDetail.getTitle());
+        mNewsDetail = newsDetail;
 
+        mCollapsingToolbarLayout.setTitle(mNewsDetail.getTitle());
         // TODO: accurate news content formation
-        newsContentView.setText(newsDetail.getContent().replaceAll(" 　　", "\n 　　"));
+        newsContentView.setText(mNewsDetail.getContent().replaceAll(" 　　", "\n 　　"));
 
-        List<String> imageList = newsDetail.getImages();
+        List<String> imageList = mNewsDetail.getImages();
         if (imageList.size() > 0) {
             Glide.with(this).load(imageList.get(0)).into(newsImageView);
         } else {

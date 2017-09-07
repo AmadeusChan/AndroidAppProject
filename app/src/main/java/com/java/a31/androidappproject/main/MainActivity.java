@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         NewsManager.getInstance(getApplicationContext());
 
         mPresenter.switchNavigation(R.id.navigation_home);
-
-
     }
 
     @Override

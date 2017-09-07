@@ -1,6 +1,7 @@
 package com.java.a31.androidappproject.news;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,9 @@ import butterknife.ButterKnife;
  */
 
 public class NewsFragment extends Fragment {
+
+    @BindView(R.id.search_view)
+    SearchView mSearchView;
 
     @BindView(R.id.tab_layout)
     TabLayout mTabLayout;
