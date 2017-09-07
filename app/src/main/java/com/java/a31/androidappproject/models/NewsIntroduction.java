@@ -117,7 +117,13 @@ public class NewsIntroduction implements INewsIntroduction{
 
     @Override
     public boolean isRead() {
-        return isReadFlag;
+        try {
+            NewsManager newsManager=NewsManager.getInstance();
+            return newsManager.isReadNews(ID);
+        } catch (NewsManagerNotInitializedException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
@@ -125,7 +131,7 @@ public class NewsIntroduction implements INewsIntroduction{
         try {
             NewsManager newsManager=NewsManager.getInstance();
             return newsManager.isFavoriteNews(ID);
-        } catch (NewsManagerNotInitlializedException e) {
+        } catch (NewsManagerNotInitializedException e) {
             e.printStackTrace();
             return false;
         }

@@ -63,8 +63,13 @@ public class NewsList implements INewsList {
     }
 
     @Override
-    public void getMore(int size, int pageNo, final INewsListener<List<INewsIntroduction>> listener) {
-        String url="http://166.111.68.66:2042/news/action/query/latest"+"?pageNo="+pageNo+"&pageSize="+size;
+    public void getMore(int size, int pageNo, INewsListener<List<INewsIntroduction>> listener) {
+        getMore(size, pageNo, -1, listener);
+    }
+
+    @Override
+    public void getMore(int size, int pageNo, int category, final INewsListener<List<INewsIntroduction>> listener) {
+        String url="http://166.111.68.66:2042/news/action/query/latest"+"?pageNo="+pageNo+"&pageSize="+size+"&category="+category;
         Log.d("url", url);
         //url="http://166.111.68.66:2042/news/action/query/latest?pageNo=1&pageSize=20";
         StringRequest request=new StringRequest(Request.Method.GET, url,

@@ -7,6 +7,8 @@ import android.util.Log;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -24,12 +26,21 @@ public class NewsIntroductionTest {
 
     @Test
     public void isRead() throws Exception {
+        INewsList newsList=newsManager.getLatestNews(INews.NORMAL_MODE);
+        newsList.getMore(10, 1, new INewsListener<List<INewsIntroduction>>() {
+            @Override
+            public void getResult(List<INewsIntroduction> result) {
 
+            }
+        });
+
+
+        String ID="2016091304130fa2b951a9994d4ab5e4b938a0eef205";
     }
 
     @Test
     public void isFavorite() throws Exception {
-        String ID="2016091304130fa2b951a9994d4ab5e4b938a0eef205";
+        String ID="20160913041301d5fc6a41214a149cd8a0581d3a014f";
         newsManager.getNewsDetails(ID, INews.NORMAL_MODE, new INewsListener<INewsDetail>(){
             @Override
             public void getResult(INewsDetail result) {

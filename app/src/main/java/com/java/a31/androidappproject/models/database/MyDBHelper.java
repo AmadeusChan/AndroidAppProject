@@ -20,6 +20,7 @@ import java.util.List;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME="NewsDatabase.db";
+    public static final int VERSION=4;
 
     // about category list
     public static final String CATEGORY_LIST_TABLE_NAME="category_list_table";
@@ -38,7 +39,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     private Context context;
 
     public MyDBHelper(Context context) {
-        super(context, DATABASE_NAME, null, 3);
+        super(context, DATABASE_NAME, null, VERSION);
         this.context=context;
         Log.d("locate", "constructor");
     }
@@ -167,13 +168,12 @@ public class MyDBHelper extends SQLiteOpenHelper {
     }
 
     public boolean insertReadNews(String ID) {
-        return false;
-
+        if (ReadNewsManager.isReadNews(ID, this.getReadableDatabase())) return false;
+        return ReadNewsManager.addReadNews(ID, this.getWritableDatabase());
     }
 
     public boolean isReadNews(String ID) {
-        return false;
-
+        return ReadNewsManager.isReadNews(ID, this.getReadableDatabase());
     }
 
 }

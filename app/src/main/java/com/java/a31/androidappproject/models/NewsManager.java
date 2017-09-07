@@ -42,8 +42,8 @@ public class NewsManager {
      * 注意：需要在调用过NewsManager.getInstance(Context)之后(为了正确设置Context)才能调用该方法，否则会返回null
      * @return
      */
-    public static synchronized NewsManager getInstance() throws NewsManagerNotInitlializedException {
-        if (instance==null) throw new NewsManagerNotInitlializedException();
+    public static synchronized NewsManager getInstance() throws NewsManagerNotInitializedException {
+        if (instance==null) throw new NewsManagerNotInitializedException();
         return instance;
     }
 
@@ -72,6 +72,7 @@ public class NewsManager {
      * @param listener 在获取新闻详细信息的操作完成之后，将数据以INewsDetail接口的信息传递给listener.getResult方法执行
      */
     public void getNewsDetails(String ID, int mode, INewsListener<INewsDetail> listener) {
+        myDBHelper.insertReadNews(ID);
         NewsDetailFetcherFromInternet.fetchDetail(ID, context, mode, listener);
     }
 
@@ -136,8 +137,12 @@ public class NewsManager {
         myDBHelper.deleteCategory(category);
     }
 
-    public void isReadNews(String ID) {
+    boolean addReadNews(String ID) {
+        return myDBHelper.insertReadNews(ID);
+    }
 
+    boolean isReadNews(String ID) {
+        return myDBHelper.isReadNews(ID);
     }
 
 }

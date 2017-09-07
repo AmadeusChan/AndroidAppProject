@@ -22,11 +22,12 @@ public class NewsManagerTest {
     @Test
     public void getLatestNews() throws Exception {
         Context context= InstrumentationRegistry.getContext();
-        INewsList newsList=NewsManager.getInstance(context).getLatestNews(20);
-        newsList.getMore(20, 1, new INewsListener<List<INewsIntroduction>>() {
+        INewsList newsList=NewsManager.getInstance(context).getLatestNews(INews.NORMAL_MODE);
+        newsList.getMore(50, 1, 12, new INewsListener<List<INewsIntroduction>>() {
             @Override
             public void getResult(List<INewsIntroduction> result) {
                 Log.d("getResult:", "result!");
+                Log.d("getResult:", ""+result.size());
                 if (result==null) {
                     System.out.println("BOMB!");
                 } else
@@ -35,7 +36,7 @@ public class NewsManagerTest {
                     }
             }
         });
-        while (true);
+        Thread.sleep(1000);
 
     }
 

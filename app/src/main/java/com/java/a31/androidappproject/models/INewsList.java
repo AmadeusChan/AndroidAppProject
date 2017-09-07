@@ -34,5 +34,7 @@ public interface INewsList {
      * 给新闻列表设置过滤器，使得调用getMore()方法时只返回使得filter.accept()返回值为true的新闻，默认返回所有新闻
      * @param filter
      */
+    void getMore(int size, int pageNo, int category, final INewsListener<List<INewsIntroduction>> listener);
+
     void setFilter(INewsFilter filter);
 }
