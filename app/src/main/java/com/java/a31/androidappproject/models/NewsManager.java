@@ -59,10 +59,13 @@ public class NewsManager {
 
     /**
      * 表示获取一个新闻列表的方法
+     * 如果当前没有网络连接，则返回NewsManager.getCachedNewsList()
      * @param mode mode=INews.TEXT_ONLY表示文字模式，即调用INewsList中的借口返回的数据中不包含图片;mode=INews.NORMAL_MODE表示正常模式
      * @return 返回值为一个INewsList接口，表示某一个新闻列表，具体方法可见该类的注释
      */
     public INewsList getLatestNews(int mode) {
+        if (!isConnectToInternet()) return getCachedNewsList();
+        Log.d("internet", "online");
         return new NewsList(context, mode, NewsList.BASIC_URL_FOR_RAW_QUERY);
     }
 
@@ -175,6 +178,7 @@ public class NewsManager {
      * @return
      */
     public INewsList getCachedNewsList() {
+        Log.d("locate", "getCachedNewsList()");
         return myDBHelper.getCachedNewsList();
     }
 
