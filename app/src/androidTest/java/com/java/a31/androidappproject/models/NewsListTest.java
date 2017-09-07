@@ -28,14 +28,14 @@ public class NewsListTest {
     @Test
     public void getMore() throws Exception {
         Log.d("getMore", "Test getMore()");
-        newsList=new NewsList(context, INews.NORMAL_MODE);
+        newsList=new NewsList(context, INews.NORMAL_MODE, NewsList.BASIC_URL_FOR_RAW_QUERY);
         newsList.setFilter(new INewsFilter() {
             @Override
             public boolean accept(INewsIntroduction newsIntroduction) {
                 return false;
             }
         });
-        newsList.getMore(10000, new INewsListener<List<INewsIntroduction>>() {
+        newsList.getMore(1000, new INewsListener<List<INewsIntroduction>>() {
             @Override
             public void getResult(List<INewsIntroduction> result) {
                 Log.d("getMore", "result!");
