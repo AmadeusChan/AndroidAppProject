@@ -130,4 +130,13 @@ public class NewsManagerTest {
         Thread.sleep(1000);
     }
 
+    @Test
+    public void jump2Baike() throws Exception {
+        //NewsManager.getInstance().jump2Baike("中国");
+        //NewsManager.getInstance().jump2Baike("北京");
+        //NewsManager.getInstance().jump2Baike("上海");
+        //NewsManager.getInstance().jump2Baike("村上春树");
+        NewsManager.getInstance().jump2Baike("海明威");
+    }
+
 }
