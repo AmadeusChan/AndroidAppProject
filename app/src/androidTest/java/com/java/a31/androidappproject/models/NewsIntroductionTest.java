@@ -30,17 +30,18 @@ public class NewsIntroductionTest {
         newsList.getMore(10, 1, new INewsListener<List<INewsIntroduction>>() {
             @Override
             public void getResult(List<INewsIntroduction> result) {
-
+                INewsIntroduction newsIntroduction=result.get(2);
+                Log.d("isRead", newsIntroduction.getTitle());
+                Log.d("isRead", ""+newsIntroduction.isRead());
             }
         });
 
 
-        String ID="2016091304130fa2b951a9994d4ab5e4b938a0eef205";
     }
 
     @Test
     public void isFavorite() throws Exception {
-        String ID="20160913041301d5fc6a41214a149cd8a0581d3a014f";
+        String ID="201609130413037a073b2cdb4768aff90eff46f2665b";
         newsManager.getNewsDetails(ID, INews.NORMAL_MODE, new INewsListener<INewsDetail>(){
             @Override
             public void getResult(INewsDetail result) {

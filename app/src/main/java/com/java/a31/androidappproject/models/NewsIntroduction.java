@@ -115,6 +115,10 @@ public class NewsIntroduction implements INewsIntroduction{
         return introduction;
     }
 
+    /***
+     * 判断当前新闻是否读过，是否读过的标准为是否使用NewsManager.getNewsDetails获取过该新闻的详细信息
+     * @return true表示读过，false表示没有读过
+     */
     @Override
     public boolean isRead() {
         try {
@@ -126,6 +130,10 @@ public class NewsIntroduction implements INewsIntroduction{
         }
     }
 
+    /**
+     * 判断当前新闻是否被收藏
+     * @return true表示被收藏，false表示没有
+     */
     @Override
     public boolean isFavorite() {
         try {
@@ -137,6 +145,10 @@ public class NewsIntroduction implements INewsIntroduction{
         }
     }
 
+    /**
+     * 返回当前新闻涉及的图片的url，建议使用Android-Universal-Image-Loader(https://github.com/nostra13/Android-Universal-Image-Loader)将图片加载到imageView中
+     * @return
+     */
     @Override
     public List<String> getImages() {
         return images;
