@@ -1,11 +1,11 @@
 package com.java.a31.androidappproject.models.database;
 
-import com.java.a31.androidappproject.models.INewsDetail;
+import android.util.Log;
+
 import com.java.a31.androidappproject.models.INewsFilter;
 import com.java.a31.androidappproject.models.INewsIntroduction;
 import com.java.a31.androidappproject.models.INewsList;
 import com.java.a31.androidappproject.models.INewsListener;
-import com.java.a31.androidappproject.models.NewsDetail;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +14,13 @@ import java.util.List;
  * Created by amadeus on 9/7/17.
  */
 
-public class FavoriteNewsList implements INewsList {
-    private List<INewsDetail> newsList;
+public class CachedNewsList implements INewsList {
+    private List<INewsIntroduction> newsList;
     private int count;
     private INewsFilter filter, filter0;
 
-    FavoriteNewsList(List<INewsDetail> newsList) {
-        this.newsList=newsList;
+    CachedNewsList(List<INewsIntroduction> list) {
+        this.newsList=list;
         count=0;
         filter=new INewsFilter() {
             @Override
@@ -34,6 +34,7 @@ public class FavoriteNewsList implements INewsList {
                 return true;
             }
         };
+        //Log.d("cached list", "LIST SIZE "+list.size());
     }
 
     @Override
@@ -42,8 +43,7 @@ public class FavoriteNewsList implements INewsList {
     }
 
     @Override
-    public void getMore(int size, int pageNo, int category, INewsListener<List<INewsIntroduction>> listener) {
-        // this method has bug
+    public void getMore(int size, int pageNo, final int category, INewsListener<List<INewsIntroduction>> listener) {
         List<INewsIntroduction> list=new ArrayList<>();
         for (int i=(pageNo-1)*size; i<pageNo*size; ++i) {
             if (i>=newsList.size()) break;
@@ -60,7 +60,6 @@ public class FavoriteNewsList implements INewsList {
         List<INewsIntroduction> list=new ArrayList<>();
         for (int i=(pageNo-1)*size; i<pageNo*size; ++i) {
             if (i>=newsList.size()) break;
-            if (!filter.accept(newsList.get(i))) continue;
             list.add(newsList.get(i));
             count=i;
         }
@@ -70,11 +69,12 @@ public class FavoriteNewsList implements INewsList {
     @Override
     public void getMore(int size, INewsListener<List<INewsIntroduction>> listener) {
         ArrayList<INewsIntroduction> list=new ArrayList<>();
+        int i=size;
         while (true) {
-            if (count>=newsList.size() || size==0) break;
+            if (count>=newsList.size() || i==0) break;
             INewsIntroduction newsIntroduction=newsList.get(count);
             if (filter.accept(newsIntroduction) && filter0.accept(newsIntroduction)) {
-                size--;
+                i--;
                 list.add(newsIntroduction);
             }
             ++count;
@@ -86,4 +86,5 @@ public class FavoriteNewsList implements INewsList {
     public void setFilter(INewsFilter filter) {
         this.filter = filter;
     }
+
 }

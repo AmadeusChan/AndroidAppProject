@@ -5,9 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.constraint.solver.Cache;
 import android.util.Log;
 
 import com.java.a31.androidappproject.models.INewsDetail;
+import com.java.a31.androidappproject.models.INewsIntroduction;
 import com.java.a31.androidappproject.models.INewsList;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ import java.util.List;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME="NewsDatabase.db";
-    public static final int VERSION=4;
+    public static final int VERSION=6;
 
     // about category list
     public static final String CATEGORY_LIST_TABLE_NAME="category_list_table";
@@ -67,9 +69,15 @@ public class MyDBHelper extends SQLiteOpenHelper {
                 "create table if not exists "+FAVORITE_LIST_TABLE_NAME
                         +" ("+FAVORITE_COLUMN_NEWS_ID+" text, "+FAVORITE_COLUMN_NEWS_CONTENT+" text)"
         );
+
         sqLiteDatabase.execSQL(
                 "create table if not exists "+READ_NEWS_TABLE+
                         " ("+READ_NEWS_ID_COLUMN+" text)"
+        );
+
+        sqLiteDatabase.execSQL(
+                "create table if not exists "+CachedNewsListManager.TABLE+" ("+CachedNewsListManager.ID_COLUMN+" text, "+
+                        CachedNewsListManager.INTRODUCTION_COLUMN+" text)"
         );
     }
 
@@ -78,6 +86,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("drop table if exists "+CATEGORY_LIST_TABLE_NAME);
         sqLiteDatabase.execSQL("drop table if exists "+FAVORITE_LIST_TABLE_NAME);
         sqLiteDatabase.execSQL("drop table if exists "+READ_NEWS_TABLE);
+        sqLiteDatabase.execSQL("drop table if exists "+CachedNewsListManager.TABLE);
         onCreate(sqLiteDatabase);
     }
 
@@ -167,6 +176,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return FavoriteNewsManager.getFavoriteNewsList(sqLiteDatabase);
     }
 
+    // these methods are about news that have been read
     public boolean insertReadNews(String ID) {
         if (ReadNewsManager.isReadNews(ID, this.getReadableDatabase())) return false;
         return ReadNewsManager.addReadNews(ID, this.getWritableDatabase());
@@ -174,6 +184,21 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     public boolean isReadNews(String ID) {
         return ReadNewsManager.isReadNews(ID, this.getReadableDatabase());
+    }
+
+    // these following methods are about cached news list
+    public boolean isInCachedNewsList(String ID) {
+        return CachedNewsListManager.isInCachedNewsList(ID, this.getReadableDatabase());
+    }
+
+    public boolean add2CachedNewsList(INewsIntroduction newsIntroduction) {
+        //Log.d("cached list", "add2CachedNewsList "+newsIntroduction.getID());
+        if (isInCachedNewsList(newsIntroduction.getID())) return false;
+        return CachedNewsListManager.add2CachedNewsList(newsIntroduction, this.getWritableDatabase());
+    }
+
+    public INewsList getCachedNewsList() {
+        return CachedNewsListManager.getCachedNewsList(this.getReadableDatabase());
     }
 
 }

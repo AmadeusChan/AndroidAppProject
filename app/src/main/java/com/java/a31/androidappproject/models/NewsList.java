@@ -32,10 +32,17 @@ import java.util.regex.Pattern;
  */
 
 public class NewsList implements INewsList {
-    private final int PAGE_SIZE=100;
+    private final int PAGE_SIZE=500;
+    private final int PAGE_NUM=500;
 
     private HashSet<String> showedNews=new HashSet<String>();
-    protected INewsFilter filter=new INewsFilter() {
+    private INewsFilter filter=new INewsFilter() {
+        @Override
+        public boolean accept(INewsIntroduction newsIntroduction) {
+            return true;
+        }
+    };
+    private INewsFilter filter0=new INewsFilter() {
         @Override
         public boolean accept(INewsIntroduction newsIntroduction) {
             return true;
@@ -45,9 +52,16 @@ public class NewsList implements INewsList {
     private Context context; // attention!!
     private int mode;
 
-    public NewsList(Context context, int mode) {
+    private List<INewsIntroduction> buffer;
+    private int sizeNeed;
+
+    NewsList(Context context, int mode) {
         this.context=context;
         this.mode=mode;
+    }
+
+    void setFilter0(INewsFilter filter0) {
+        this.filter0 = filter0;
     }
 
     private boolean getNetworkState() {
@@ -120,10 +134,10 @@ public class NewsList implements INewsList {
 
                                     if (filter!=null) {
                                         if (filter.accept(news)) {
-                                            list.add(news);
+                                            if (filter0==null || filter0.accept(news)) list.add(news);
                                         }
                                     } else {
-                                        list.add(news);
+                                        if (filter0==null || filter0.accept(news)) list.add(news);
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -133,6 +147,14 @@ public class NewsList implements INewsList {
                             e.printStackTrace();
                         }
 
+                        for (INewsIntroduction i: list) {
+                            //Log.d("cached list", "trying to add "+i.getTitle());
+                            try {
+                                NewsManager.getInstance().add2CachedNewsList(i);
+                            } catch (NewsManagerNotInitializedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         listener.getResult(list);
                     }
                 },
@@ -145,6 +167,46 @@ public class NewsList implements INewsList {
         );
         RequestQueue queue= Volley.newRequestQueue(context);
         queue.add(request);
+    }
+
+    private void needMore(final INewsListener<List<INewsIntroduction>> listener) {
+        Log.d("getMore", "needMore "+sizeNeed+" current_page="+currentPageNumber);
+        if (sizeNeed==0 || currentPageNumber>PAGE_NUM) {
+            for (INewsIntroduction i: buffer) {
+                try {
+                    NewsManager.getInstance().add2CachedNewsList(i);
+                } catch (NewsManagerNotInitializedException e) {
+                    e.printStackTrace();
+                }
+            }
+            listener.getResult(buffer);
+        } else {
+            getMore(PAGE_SIZE, currentPageNumber, new INewsListener<List<INewsIntroduction>>(){
+                @Override
+                public void getResult(List<INewsIntroduction> result) {
+                    for (INewsIntroduction newsIntroduction: result) {
+                        if (filter.accept(newsIntroduction) && filter0.accept(newsIntroduction) && !showedNews.contains(newsIntroduction.getID())) {
+                            buffer.add(newsIntroduction);
+                            showedNews.add(newsIntroduction.getID());
+                            if ((--sizeNeed)==0) {
+                                break;
+                            }
+                        }
+                    }
+                    if (sizeNeed>0) {
+                        ++currentPageNumber;
+                    }
+                    needMore(listener);
+                }
+            });
+        }
+    }
+
+    public void getMore(int size, INewsListener<List<INewsIntroduction>> listener) {
+        Log.d("getMore", "getMore(size, listener)");
+        buffer=new ArrayList<>();
+        sizeNeed=size;
+        needMore(listener);
     }
 
     @Override
