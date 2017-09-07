@@ -1,10 +1,12 @@
 package com.java.a31.androidappproject.models;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.util.Log;
 
 import com.java.a31.androidappproject.models.database.MyDBHelper;
@@ -184,6 +186,16 @@ public class NewsManager {
 
     public INewsList searchNews(String keyWord, int mode) {
         return new NewsList(context, mode, NewsList.BASIC_URL_PREFIX_FOR_SEARCH+keyWord+"&");
+    }
+
+    /**
+     * 调用该方法会在浏览器中打开keyWord相关的百科页面（互动百科）
+     * @param keyWord 词条名字
+     */
+    public void jump2Baike(String keyWord) {
+        String url="http://www.baike.com/wiki/"+keyWord;
+        Uri uri=Uri.parse(url);
+        context.startActivity(new Intent(Intent.ACTION_VIEW,uri));
     }
 
     // package-private
