@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.models.INewsIntroduction;
+import com.java.a31.androidappproject.news.NewsDetail.NewsDetailActivity;
 import com.java.a31.androidappproject.news.NewsListAdapter;
 
 import java.util.List;
@@ -155,7 +156,8 @@ public class NewsListFragment extends Fragment implements NewsListContract.View,
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
+        INewsIntroduction newsIntroduction = (INewsIntroduction) adapter.getItem(position);
+        NewsDetailActivity.start(view.getContext(), newsIntroduction.getID());
     }
 
 }
