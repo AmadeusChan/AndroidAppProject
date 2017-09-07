@@ -147,6 +147,14 @@ public class NewsList implements INewsList {
                             e.printStackTrace();
                         }
 
+                        for (INewsIntroduction i: list) {
+                            //Log.d("cached list", "trying to add "+i.getTitle());
+                            try {
+                                NewsManager.getInstance().add2CachedNewsList(i);
+                            } catch (NewsManagerNotInitializedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         listener.getResult(list);
                     }
                 },
@@ -164,6 +172,13 @@ public class NewsList implements INewsList {
     private void needMore(final INewsListener<List<INewsIntroduction>> listener) {
         Log.d("getMore", "needMore "+sizeNeed+" current_page="+currentPageNumber);
         if (sizeNeed==0 || currentPageNumber>PAGE_NUM) {
+            for (INewsIntroduction i: buffer) {
+                try {
+                    NewsManager.getInstance().add2CachedNewsList(i);
+                } catch (NewsManagerNotInitializedException e) {
+                    e.printStackTrace();
+                }
+            }
             listener.getResult(buffer);
         } else {
             getMore(PAGE_SIZE, currentPageNumber, new INewsListener<List<INewsIntroduction>>(){

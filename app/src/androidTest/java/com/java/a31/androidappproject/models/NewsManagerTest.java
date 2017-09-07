@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.util.Log;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -14,6 +15,12 @@ import static org.junit.Assert.*;
  * Created by amadeus on 9/5/17.
  */
 public class NewsManagerTest {
+
+    @Before
+    public void setUp() {
+        NewsManager.getInstance(InstrumentationRegistry.getTargetContext());
+    }
+
     @Test
     public void getInstance() throws Exception {
 

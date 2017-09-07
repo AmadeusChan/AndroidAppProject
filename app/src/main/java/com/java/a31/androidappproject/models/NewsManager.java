@@ -94,6 +94,7 @@ public class NewsManager {
 
     /**
      * 获得收藏的新闻列表
+     * 对于返回的INewsList对象，建议使用getMore(size, listener)和reset()两个方法来获取其中的INewsIntroduction对象
      * @return 收藏的新闻列表
      */
     public INewsList getFavoriteNews() {
@@ -125,24 +126,50 @@ public class NewsManager {
         mediaPlayer.start();
     }
 
+    /**
+     * 该方法返回记录的分类列表设定
+     * @return
+     */
     public List<String> getCategoryList() {
         return myDBHelper.getCategoryList();
     }
 
+    /**
+     * 添加分类列表，分类名称必须是"科技"、"国内"...等12个分类之一
+     * @param category
+     */
     public void addCategory(String category) {
         myDBHelper.insertCategory(category);
     }
 
+    /**
+     * 删除分类列表，分类名称必须是"科技"、"国内"...等12个分类之一
+     * @param category
+     */
     public void deleteCategory(String category) {
         myDBHelper.deleteCategory(category);
     }
 
+    /**
+     * 该方法返回所有缓存下来的新闻列表，离线状态下该方法也可以使用，缓存下来的新闻指所有在getLatestNews中网络访问获得的新闻
+     * @return
+     */
+    public INewsList getCachedNewsList() {
+        return myDBHelper.getCachedNewsList();
+    }
+
+    // package-private
     boolean addReadNews(String ID) {
         return myDBHelper.insertReadNews(ID);
     }
 
+    // package-private
     boolean isReadNews(String ID) {
         return myDBHelper.isReadNews(ID);
+    }
+
+    boolean add2CachedNewsList(INewsIntroduction newsIntroduction) {
+        return myDBHelper.add2CachedNewsList(newsIntroduction);
     }
 
 }

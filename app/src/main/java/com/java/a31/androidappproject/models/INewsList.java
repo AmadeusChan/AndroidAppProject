@@ -36,6 +36,8 @@ public interface INewsList {
      */
     void getMore(int size, int pageNo, int category, final INewsListener<List<INewsIntroduction>> listener);
 
+    void getMore(int size, INewsListener<List<INewsIntroduction>> listener);
+
     /**
      * 给当前新闻列表设置filter
      * 注意：能被该filter接受的新闻应该在新闻库中占有足够高的比例，否则有可能导致在调用getMore()方法的时候遍历了整个在线新闻库

@@ -22,7 +22,7 @@ import java.util.List;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME="NewsDatabase.db";
-    public static final int VERSION=4;
+    public static final int VERSION=6;
 
     // about category list
     public static final String CATEGORY_LIST_TABLE_NAME="category_list_table";
@@ -192,6 +192,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     }
 
     public boolean add2CachedNewsList(INewsIntroduction newsIntroduction) {
+        //Log.d("cached list", "add2CachedNewsList "+newsIntroduction.getID());
         if (isInCachedNewsList(newsIntroduction.getID())) return false;
         return CachedNewsListManager.add2CachedNewsList(newsIntroduction, this.getWritableDatabase());
     }

@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.gson.Gson;
 import com.java.a31.androidappproject.models.INewsIntroduction;
 import com.java.a31.androidappproject.models.INewsList;
+import com.java.a31.androidappproject.models.NewsIntroduction;
+
+import java.util.ArrayList;
 
 /**
  * Created by amadeus on 9/7/17.
@@ -38,6 +41,17 @@ class CachedNewsListManager {
     }
 
     static INewsList getCachedNewsList(SQLiteDatabase sqLiteDatabase) {
-
+        Cursor cursor=sqLiteDatabase.rawQuery("select * from "+TABLE, null);
+        ArrayList<INewsIntroduction> list=new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                String ID=cursor.getString(cursor.getColumnIndex(ID_COLUMN));
+                String content=cursor.getString(cursor.getColumnIndex(INTRODUCTION_COLUMN));
+                INewsIntroduction newsIntroduction=new Gson().fromJson(content, NewsIntroduction.class);
+                list.add(newsIntroduction);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return new CachedNewsList(list);
     }
 }
