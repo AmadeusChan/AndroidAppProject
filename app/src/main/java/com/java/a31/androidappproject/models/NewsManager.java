@@ -19,31 +19,14 @@ public class NewsManager {
     private Context context; // This reference should points to you MainActivity.getApplicationContext()
     private MediaPlayer mediaPlayer;
     private MyDBHelper myDBHelper;
-    /*
-    private TextToSpeech tts;
-    private int tts_cnt;
-    */
 
     private NewsManager(Context context) {
         this.context=context;
         myDBHelper=new MyDBHelper(context);
-
-        /*
-        // to initialize tts
-        tts=new TextToSpeech(context, new TextToSpeech.OnInitListener(){
-            @Override
-            public void onInit(int i) {
-                if (i!=TextToSpeech.ERROR) {
-                    tts.setLanguage(Locale.CHINA);
-                }
-            }
-        });
-        tts_cnt=0;
-        */
     }
 
     /**
-     * 该类的功能是返回一个NewsManager类的实例
+     * 该方法的功能是返回一个NewsManager类的实例
      * ATTENTION! In order to avoid possible memory leaking, the argument context here should be Context.getApplicationContext()
      */
     public static synchronized NewsManager getInstance(Context context) {
@@ -52,6 +35,16 @@ public class NewsManager {
         } else {
             return instance;
         }
+    }
+
+    /**
+     * 该方法的功能是返回一个NewsManager实例
+     * 注意：需要在调用过NewsManager.getInstance(Context)之后(为了正确设置Context)才能调用该方法，否则会返回null
+     * @return
+     */
+    public static synchronized NewsManager getInstance() throws NewsManagerNotInitlializedException {
+        if (instance==null) throw new NewsManagerNotInitlializedException();
+        return instance;
     }
 
     /**
@@ -106,6 +99,10 @@ public class NewsManager {
         return myDBHelper.getFavoriteNewsList();
     }
 
+    public boolean isFavoriteNews(String ID) {
+        return myDBHelper.isInFavoriteList(ID);
+    }
+
     /**
      * 该方法将调用在线的TTS API将文字转成语音进行播放
      * @param text 要转成语音的文字
@@ -137,6 +134,10 @@ public class NewsManager {
 
     public void deleteCategory(String category) {
         myDBHelper.deleteCategory(category);
+    }
+
+    public void isReadNews(String ID) {
+
     }
 
 }

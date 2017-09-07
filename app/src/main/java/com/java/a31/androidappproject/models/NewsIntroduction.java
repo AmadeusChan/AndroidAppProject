@@ -122,7 +122,13 @@ public class NewsIntroduction implements INewsIntroduction{
 
     @Override
     public boolean isFavorite() {
-        return isFavoriteFlag;
+        try {
+            NewsManager newsManager=NewsManager.getInstance();
+            return newsManager.isFavoriteNews(ID);
+        } catch (NewsManagerNotInitlializedException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

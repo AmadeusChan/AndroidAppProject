@@ -31,6 +31,10 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public static final String FAVORITE_COLUMN_NEWS_ID="news_id";
     public static final String FAVORITE_COLUMN_NEWS_CONTENT="news_content";
 
+    // about read news
+    public static final String READ_NEWS_TABLE="read_news_table";
+    public static final String READ_NEWS_ID_COLUMN="news_id";
+
     private Context context;
 
     public MyDBHelper(Context context) {
@@ -62,15 +66,21 @@ public class MyDBHelper extends SQLiteOpenHelper {
                 "create table if not exists "+FAVORITE_LIST_TABLE_NAME
                         +" ("+FAVORITE_COLUMN_NEWS_ID+" text, "+FAVORITE_COLUMN_NEWS_CONTENT+" text)"
         );
+        sqLiteDatabase.execSQL(
+                "create table if not exists "+READ_NEWS_TABLE+
+                        " ("+READ_NEWS_ID_COLUMN+" text)"
+        );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("drop table if exists "+CATEGORY_LIST_TABLE_NAME);
         sqLiteDatabase.execSQL("drop table if exists "+FAVORITE_LIST_TABLE_NAME);
+        sqLiteDatabase.execSQL("drop table if exists "+READ_NEWS_TABLE);
         onCreate(sqLiteDatabase);
     }
 
+    // these following methods are about news category
     private boolean isValidCategory(String categoryName) {
         for (int i=0; i<categoryList.length; ++i) {
             if (categoryList[i].equals(categoryName)) {
@@ -80,7 +90,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    private boolean isCategoryInTable(String categoryName) {
+    public boolean isCategoryInTable(String categoryName) {
         SQLiteDatabase sqLiteDatabase=this.getReadableDatabase();
         Cursor cursor;
         try {
@@ -135,6 +145,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    // these following methods are concerning the news set as favorite
+    public boolean isInFavoriteList(String ID) {
+        return FavoriteNewsManager.isInFavoriteList(ID, this.getReadableDatabase());
+    }
+
     public boolean insertFavoriteNews(INewsDetail newsDetail) {
         if (FavoriteNewsManager.isInFavoriteList(newsDetail.getID(), this.getReadableDatabase())) return false;
         SQLiteDatabase sqLiteDatabase=this.getWritableDatabase();
@@ -149,6 +164,16 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public INewsList getFavoriteNewsList() {
         SQLiteDatabase sqLiteDatabase=this.getReadableDatabase();
         return FavoriteNewsManager.getFavoriteNewsList(sqLiteDatabase);
+    }
+
+    public boolean insertReadNews(String ID) {
+        return false;
+
+    }
+
+    public boolean isReadNews(String ID) {
+        return false;
+
     }
 
 }
