@@ -32,6 +32,9 @@ import java.util.regex.Pattern;
  */
 
 public class NewsList implements INewsList {
+    public static String BASIC_URL_FOR_RAW_QUERY="http://166.111.68.66:2042/news/action/query/latest";
+    public static String BASIC_URL_PREFIX_FOR_SEARCH="http://166.111.68.66:2042/news/action/query/search?keyword=";
+
     private final int PAGE_SIZE=500;
     private final int PAGE_NUM=500;
 
@@ -55,9 +58,12 @@ public class NewsList implements INewsList {
     private List<INewsIntroduction> buffer;
     private int sizeNeed;
 
-    NewsList(Context context, int mode) {
+    private String basicURL;
+
+    NewsList(Context context, int mode, String basicURL) {
         this.context=context;
         this.mode=mode;
+        this.basicURL=basicURL;
     }
 
     void setFilter0(INewsFilter filter0) {
@@ -83,7 +89,8 @@ public class NewsList implements INewsList {
 
     @Override
     public void getMore(int size, int pageNo, int category, final INewsListener<List<INewsIntroduction>> listener) {
-        String url="http://166.111.68.66:2042/news/action/query/latest"+"?pageNo="+pageNo+"&pageSize="+size+"&category="+category;
+        //String url="http://166.111.68.66:2042/news/action/query/latest"+"?pageNo="+pageNo+"&pageSize="+size+"&category="+category;
+        String url=basicURL+"?pageNo="+pageNo+"&pageSize="+size+"&category="+category;
         Log.d("url", url);
         //url="http://166.111.68.66:2042/news/action/query/latest?pageNo=1&pageSize=20";
         StringRequest request=new StringRequest(Request.Method.GET, url,

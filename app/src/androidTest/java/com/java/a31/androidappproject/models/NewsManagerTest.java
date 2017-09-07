@@ -51,22 +51,22 @@ public class NewsManagerTest {
     public void getNewsDetails() throws Exception {
         Log.d("go: ", "getNewsDetails()");
         Context context=InstrumentationRegistry.getContext();
-        String ID="201609130413080e91293fb5402b80437a65970fcb7d";
+        String ID="2016091304131c1376b3db72473fa06b633c0a3d1140";
         int mode=INews.NORMAL_MODE;
         NewsManager.getInstance(context).getNewsDetails(ID, mode, new INewsListener<INewsDetail>() {
             @Override
             public void getResult(INewsDetail result) {
                 Log.d("go: ","result got!");
                 if (result!=null) {
-                    Log.d("persons: ", result.getPersons().toString());
-                    Log.d("locations: ", result.getLocations().toString());
-                    Log.d("keyWords: ", result.getKeyWords().toString());
-                    Log.d("images: ", result.getImages().toString());
-                    Log.d("Content: ", result.getContent());
+                    Log.d("detail persons: ", result.getPersons().toString());
+                    Log.d("detail locations: ", result.getLocations().toString());
+                    Log.d("detail keyWords: ", result.getKeyWords().toString());
+                    Log.d("detail images: ", result.getImages().toString());
+                    Log.d("detail Content: ", result.getContent());
                 }
             }
         });
-        while (true);
+        Thread.sleep(2000);
     }
 
     @Test
@@ -112,6 +112,22 @@ public class NewsManagerTest {
     @Test
     public void deleteCategory() throws Exception {
 
+    }
+
+    @Test
+    public  void searchNews() throws Exception {
+        INewsList newsList=NewsManager.getInstance().searchNews("北京广东", INews.NORMAL_MODE);
+        newsList.getMore(10, 1, new INewsListener<List<INewsIntroduction>>() {
+            @Override
+            public void getResult(List<INewsIntroduction> result) {
+                Log.d("search", ""+result.size());
+                for (INewsIntroduction i: result) {
+                    Log.d("search", i.getTitle());
+                    Log.d("search", i.getIntroduction());
+                }
+            }
+        });
+        Thread.sleep(1000);
     }
 
 }

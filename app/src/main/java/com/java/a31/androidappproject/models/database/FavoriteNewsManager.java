@@ -66,4 +66,16 @@ class FavoriteNewsManager {
         cursor.close();
         return new FavoriteNewsList(list);
     }
+
+    static INewsDetail getFavoriteNewsDetails(String ID, SQLiteDatabase sqLiteDatabase) {
+        Cursor cursor=sqLiteDatabase.rawQuery("select * from "+MyDBHelper.FAVORITE_LIST_TABLE_NAME+
+                " where "+MyDBHelper.FAVORITE_COLUMN_NEWS_ID+"=\""+ID+"\"", null);
+        INewsDetail newsDetail=null;
+        if (cursor.moveToFirst()) {
+            String content=cursor.getString(cursor.getColumnIndex(MyDBHelper.FAVORITE_COLUMN_NEWS_CONTENT));
+            newsDetail=new Gson().fromJson(content, NewsDetail.class);
+        }
+        cursor.close();
+        return newsDetail;
+    }
 }

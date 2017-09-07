@@ -68,13 +68,15 @@ public class CachedNewsListManagerTest {
             @Override
             public void getResult(List<INewsIntroduction> result) {
                 Log.d("cached list", "size: "+result.size());
+                /*
                 for (INewsIntroduction i: result) {
                     Log.d("cached list", i.getTitle()+": "+i.getIntroduction());
                 }
                 Log.d("cached list", "THE SIZE IS "+result.size());
+                */
             }
         });
-        Thread.sleep(2000);
+        Thread.sleep(1000);
     }
 
 }

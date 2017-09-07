@@ -3,10 +3,14 @@ package com.java.a31.androidappproject.models;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.java.a31.androidappproject.models.database.MyDBHelper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +27,12 @@ public class NewsManager {
     private NewsManager(Context context) {
         this.context=context;
         myDBHelper=new MyDBHelper(context);
+    }
+
+    private boolean isConnectToInternet() {
+        ConnectivityManager cm=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork!=null && activeNetwork.isConnectedOrConnecting();
     }
 
     /**
@@ -53,11 +63,12 @@ public class NewsManager {
      * @return 返回值为一个INewsList接口，表示某一个新闻列表，具体方法可见该类的注释
      */
     public INewsList getLatestNews(int mode) {
-        return new NewsList(context, mode);
+        return new NewsList(context, mode, NewsList.BASIC_URL_FOR_RAW_QUERY);
     }
 
     /**
      * 获取已知ID的新闻的详细信息的方法
+     * 如果调用该方法时没有网络连接，则返回结果取决于该新闻是否被收藏，如果被收藏则返回存在本地的详细信息，否则返回null
      * 注意：如果出现所给ID不正确等错误则将null传给listener.getResult()
      * 使用方法举例说明如下:
      * NewsManager.getInstance(context).getNewsDetails(ID, mode, new INewsListener<INewsDetail>() {
@@ -73,6 +84,15 @@ public class NewsManager {
      */
     public void getNewsDetails(String ID, int mode, INewsListener<INewsDetail> listener) {
         myDBHelper.insertReadNews(ID);
+        if (!isConnectToInternet()) {
+            NewsDetail newsDetail=(NewsDetail) myDBHelper.getFavoriteNewsDetails(ID);
+            if (mode==INews.TEXT_ONLY_MODE) {
+                newsDetail.setImages(new ArrayList<String>());
+            }
+            listener.getResult(newsDetail);
+            return ;
+        }
+        Log.d("detail","online!");
         NewsDetailFetcherFromInternet.fetchDetail(ID, context, mode, listener);
     }
 
@@ -156,6 +176,10 @@ public class NewsManager {
      */
     public INewsList getCachedNewsList() {
         return myDBHelper.getCachedNewsList();
+    }
+
+    public INewsList searchNews(String keyWord, int mode) {
+        return new NewsList(context, mode, NewsList.BASIC_URL_PREFIX_FOR_SEARCH+keyWord+"&");
     }
 
     // package-private

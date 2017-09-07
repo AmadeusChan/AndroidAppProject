@@ -80,7 +80,7 @@ public class MyDBHelperTest {
             }
         });
 
-        NewsManager.getInstance(context).getNewsDetails("2016091304131732ac05cc9d4c41bd93856dfa85509c", INews.NORMAL_MODE, new INewsListener<INewsDetail>(){
+        NewsManager.getInstance(context).getNewsDetails("2016091304131c1376b3db72473fa06b633c0a3d1140", INews.NORMAL_MODE, new INewsListener<INewsDetail>(){
             @Override
             public void getResult(INewsDetail result) {
                 Log.d("favorite", result.getID()+" "+result.getTitle());
@@ -88,8 +88,7 @@ public class MyDBHelperTest {
             }
         });
 
-        for (int i=0; i<100000000; ++i);
-        while (true);
+        Thread.sleep(2000);
     }
 
 

@@ -176,6 +176,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return FavoriteNewsManager.getFavoriteNewsList(sqLiteDatabase);
     }
 
+    public INewsDetail getFavoriteNewsDetails(String ID) {
+        SQLiteDatabase sqLiteDatabase=this.getReadableDatabase();
+        return FavoriteNewsManager.getFavoriteNewsDetails(ID, sqLiteDatabase);
+    }
+
     // these methods are about news that have been read
     public boolean insertReadNews(String ID) {
         if (ReadNewsManager.isReadNews(ID, this.getReadableDatabase())) return false;
