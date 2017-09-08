@@ -28,6 +28,7 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 }
+                getActivity().getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
                 getActivity().recreate();
                 return true;
             }

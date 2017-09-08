@@ -2,13 +2,17 @@ package com.java.a31.androidappproject.news.NewsDetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.FileProvider;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,9 +24,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.models.INewsDetail;
-import com.java.a31.androidappproject.models.NewsManager;
-import com.java.a31.androidappproject.models.NewsManagerNotInitializedException;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,11 +55,11 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
 
-    MenuItem mStarButton;
+    private MenuItem mShareButton;
 
-    MenuItem mShareButton;
+    private MenuItem mStarButton;
 
-    MenuItem mReadButton;
+    private MenuItem mReadButton;
 
     private static final String TAG = "NewsDetailActivity";
 
@@ -158,8 +164,31 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     }
 
     @Override
-    public void share() {
+    public void share(final INewsDetail newsDetail) {
+        final Intent intent = new Intent();
 
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        intent.putExtra("Kdescription", newsDetail.getTitle());
+
+        ImageLoader imageLoader = ImageLoader.getInstance();
+        imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                Log.d(TAG, imageUri);
+
+                try {
+                    File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+                    FileOutputStream out = new FileOutputStream(file);
+                    loadedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
+                    out.close();
+                    intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(NewsDetailActivity.this, "com.java.a31", file));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

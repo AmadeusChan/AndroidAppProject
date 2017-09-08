@@ -1,7 +1,12 @@
 package com.java.a31.androidappproject.news.NewsDetail;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.java.a31.androidappproject.models.INews;
 import com.java.a31.androidappproject.models.INewsDetail;
@@ -9,6 +14,10 @@ import com.java.a31.androidappproject.models.INewsListener;
 import com.java.a31.androidappproject.models.NewsDetail;
 import com.java.a31.androidappproject.models.NewsManager;
 import com.java.a31.androidappproject.models.NewsManagerNotInitializedException;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
+import java.io.File;
 
 /**
  * Created by zwei on 2017/9/7.
@@ -88,7 +97,7 @@ public class NewsDetailPresenter implements NewsDetailContract.Presenter, INewsL
         if (mNewsDetail == null) {
             return;
         }
-        mView.share();
+        mView.share(mNewsDetail);
     }
 
 }

@@ -3,13 +3,13 @@
     <PreferenceCategory
         android:title="@string/preference">
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:title="@string/no_image_mode"
             android:key="no_image_mode"
             android:defaultValue="false"
             android:summary="@string/no_image_mode_desc" />
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:title="@string/night_mode"
             android:key="night_mode"
             android:defaultValue="false" />

@@ -1,5 +1,8 @@
 package com.java.a31.androidappproject.news.NewsDetail;
 
+import android.content.Context;
+import android.content.Intent;
+
 import com.java.a31.androidappproject.BasePresenter;
 import com.java.a31.androidappproject.BaseView;
 import com.java.a31.androidappproject.models.INewsDetail;
@@ -20,7 +23,7 @@ public interface NewsDetailContract {
 
         void setUnLike();
 
-        void share();
+        void share(INewsDetail newsDetail);
 
     }
 

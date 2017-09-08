@@ -12,6 +12,8 @@ import com.java.a31.androidappproject.favorite.FavoriteFragment;
 import com.java.a31.androidappproject.models.NewsManager;
 import com.java.a31.androidappproject.news.NewsFragment;
 import com.java.a31.androidappproject.settings.SettingsFragment;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         // Initialize NewsManager::context
         NewsManager.getInstance(getApplicationContext());
+
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+        ImageLoader.getInstance().init(config);
 
         if (savedInstanceState != null) {
             int id = savedInstanceState.getInt(KEY_NAVIGATION_ID, R.id.navigation_home);
