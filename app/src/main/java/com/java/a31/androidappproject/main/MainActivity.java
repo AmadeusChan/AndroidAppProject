@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @BindView(R.id.navigation)
     BottomNavigationView mBottomNavigationView;
 
+    private static final String KEY_NAVIGATION_ID = "NAVIGATION_ID";
+
     private MainContract.Presenter mPresenter;
 
     @Override
@@ -44,7 +46,18 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         // Initialize NewsManager::context
         NewsManager.getInstance(getApplicationContext());
 
-        mPresenter.switchNavigation(R.id.navigation_home);
+        if (savedInstanceState != null) {
+            int id = savedInstanceState.getInt(KEY_NAVIGATION_ID, R.id.navigation_home);
+            mPresenter.switchNavigation(id);
+        } else {
+            mPresenter.switchNavigation(R.id.navigation_home);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_NAVIGATION_ID, mBottomNavigationView.getSelectedItemId());
     }
 
     @Override

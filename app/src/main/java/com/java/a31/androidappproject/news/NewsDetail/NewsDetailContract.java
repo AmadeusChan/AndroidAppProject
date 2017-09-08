@@ -16,11 +16,23 @@ public interface NewsDetailContract {
 
         void onFailure();
 
+        void setLike();
+
+        void setUnLike();
+
+        void share();
+
     }
 
     interface Presenter extends BasePresenter {
 
         void loadNewsDetail(String newsId);
+
+        void onLikeButtonClick();
+
+        void onReadButtonClick();
+
+        void onShareButtonCLick();
 
     }
 

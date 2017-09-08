@@ -1,5 +1,8 @@
 package com.java.a31.androidappproject.news;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.ColorInt;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -21,7 +24,12 @@ public class NewsListAdapter extends BaseQuickAdapter<INewsIntroduction, BaseVie
 
     @Override
     protected void convert(BaseViewHolder helper, INewsIntroduction item) {
+        int color = helper.itemView
+                .getResources()
+                .getColor(item.isRead() ? R.color.colorSecondaryText : R.color.colorPrimaryText);
+
         helper.setText(R.id.news_title, item.getTitle());
+        helper.setTextColor(R.id.news_title, color);
 
         List<String> imageList = item.getImages();
         if (imageList.size() > 0) {

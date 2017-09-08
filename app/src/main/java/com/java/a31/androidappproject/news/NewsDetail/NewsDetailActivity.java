@@ -34,9 +34,6 @@ import butterknife.ButterKnife;
 
 public class NewsDetailActivity extends AppCompatActivity implements NewsDetailContract.View {
 
-    @BindView(R.id.detail_title)
-    TextView newsTitleView;
-
     @BindView(R.id.detail_content)
     TextView newsContentView;
 
@@ -52,6 +49,12 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
 
+    MenuItem mStarButton;
+
+    MenuItem mShareButton;
+
+    MenuItem mReadButton;
+
     private static final String TAG = "NewsDetailActivity";
 
     private static final String KEY_NEWS_ID = "NEWS_ID";
@@ -59,8 +62,6 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     private String mNewsId;
 
     private NewsDetailContract.Presenter mPresenter;
-
-    private INewsDetail mNewsDetail;
 
     public static void start(Context context, String newsId) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
@@ -81,8 +82,6 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
         mNewsId = getIntent().getStringExtra(KEY_NEWS_ID);
 
-        new NewsDetailPresenter(this);
-
         mToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,15 +90,21 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         });
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mPresenter.loadNewsDetail(mNewsId);
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.detail_menu, menu);
+
+        mStarButton = menu.findItem(R.id.star);
+        mShareButton = menu.findItem(R.id.share);
+        mReadButton = menu.findItem(R.id.read);
+
+        // onCreateOptionsMenu is called after onCreate
+        new NewsDetailPresenter(this);
+        mPresenter.loadNewsDetail(mNewsId);
+
         return true;
     }
 
@@ -110,20 +115,13 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
                 onBackPressed();
                 return true;
             case R.id.share:
+                mPresenter.onShareButtonCLick();
                 return true;
             case R.id.star:
-                try {
-                    NewsManager.getInstance().setAsFavorite(mNewsDetail);
-                } catch (NewsManagerNotInitializedException e) {
-                    Log.e(TAG, "onOptionsItemSelected", e);
-                }
+                mPresenter.onLikeButtonClick();
                 return true;
-            case  R.id.read:
-                try {
-                    NewsManager.getInstance().speakText(mNewsDetail.getContent());
-                } catch (NewsManagerNotInitializedException e) {
-                    Log.e(TAG, "onOptionsItemSelected", e);
-                }
+            case R.id.read:
+                mPresenter.onReadButtonClick();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -132,13 +130,11 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
     @Override
     public void onSuccess(INewsDetail newsDetail) {
-        mNewsDetail = newsDetail;
-
-        mCollapsingToolbarLayout.setTitle(mNewsDetail.getTitle());
         // TODO: accurate news content formation
-        newsContentView.setText(mNewsDetail.getContent().replaceAll(" 　　", "\n 　　"));
+        mCollapsingToolbarLayout.setTitle(newsDetail.getTitle());
+        newsContentView.setText(newsDetail.getContent().replaceAll(" 　　", "\n 　　"));
 
-        List<String> imageList = mNewsDetail.getImages();
+        List<String> imageList = newsDetail.getImages();
         if (imageList.size() > 0) {
             Glide.with(this).load(imageList.get(0)).into(newsImageView);
         } else {
@@ -148,6 +144,21 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
     @Override
     public void onFailure() {
+
+    }
+
+    @Override
+    public void setLike() {
+        mStarButton.setIcon(R.drawable.ic_star_yellow_24dp);
+    }
+
+    @Override
+    public void setUnLike() {
+        mStarButton.setIcon(R.drawable.ic_star_white_24dp);
+    }
+
+    @Override
+    public void share() {
 
     }
 

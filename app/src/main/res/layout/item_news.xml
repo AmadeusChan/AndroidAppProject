@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
+    android:background="@color/colorBaseBackground"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
     android:paddingTop="@dimen/primary_margin"
@@ -15,6 +16,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:textColor="@color/colorSecondaryText"
         android:lineSpacingMultiplier="1.2"
         android:layout_marginEnd="@dimen/primary_margin"
         android:layout_marginRight="@dimen/primary_margin"
@@ -27,6 +29,8 @@
         android:id="@+id/news_image"
         android:layout_width="@dimen/item_image_height"
         android:layout_height="@dimen/item_image_height"
-        android:layout_gravity="center_vertical" />
+        android:contentDescription="@null"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/placeholder"/>
 
 </LinearLayout>

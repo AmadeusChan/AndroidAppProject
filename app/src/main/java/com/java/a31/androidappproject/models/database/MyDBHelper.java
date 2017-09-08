@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.constraint.solver.Cache;
 import android.util.Log;
 
 import com.java.a31.androidappproject.models.INewsDetail;

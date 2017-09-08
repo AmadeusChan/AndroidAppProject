@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.java.a31.androidappproject.R;
@@ -166,6 +167,9 @@ public class NewsListFragment extends Fragment implements NewsListContract.View,
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         INewsIntroduction newsIntroduction = (INewsIntroduction) adapter.getItem(position);
         NewsDetailActivity.start(view.getContext(), newsIntroduction.getID());
+
+        TextView textView = (TextView) view.findViewById(R.id.news_title);
+        textView.setTextColor(view.getResources().getColor(R.color.colorSecondaryText));
     }
 
 }
