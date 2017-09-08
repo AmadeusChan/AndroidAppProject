@@ -206,4 +206,8 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return CachedNewsListManager.getCachedNewsList(this.getReadableDatabase());
     }
 
+    public INewsList getCachedNewsList(int mode) {
+        return CachedNewsListManager.getCachedNewsList(mode, this.getReadableDatabase());
+    }
+
 }

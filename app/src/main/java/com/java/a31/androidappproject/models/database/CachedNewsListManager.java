@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.google.gson.Gson;
+import com.java.a31.androidappproject.models.INews;
 import com.java.a31.androidappproject.models.INewsIntroduction;
 import com.java.a31.androidappproject.models.INewsList;
 import com.java.a31.androidappproject.models.NewsIntroduction;
@@ -40,18 +41,25 @@ class CachedNewsListManager {
         return true;
     }
 
-    static INewsList getCachedNewsList(SQLiteDatabase sqLiteDatabase) {
+    static INewsList getCachedNewsList(int mode, SQLiteDatabase sqLiteDatabase) {
         Cursor cursor=sqLiteDatabase.rawQuery("select * from "+TABLE, null);
         ArrayList<INewsIntroduction> list=new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
                 String ID=cursor.getString(cursor.getColumnIndex(ID_COLUMN));
                 String content=cursor.getString(cursor.getColumnIndex(INTRODUCTION_COLUMN));
-                INewsIntroduction newsIntroduction=new Gson().fromJson(content, NewsIntroduction.class);
+                NewsIntroduction newsIntroduction=new Gson().fromJson(content, NewsIntroduction.class);
+                if (mode==INews.TEXT_ONLY_MODE) {
+                    newsIntroduction.setImages(new ArrayList<String>());
+                }
                 list.add(newsIntroduction);
             } while (cursor.moveToNext());
         }
         cursor.close();
         return new CachedNewsList(list);
+    }
+
+    static INewsList getCachedNewsList(SQLiteDatabase sqLiteDatabase) {
+        return getCachedNewsList(INews.NORMAL_MODE, sqLiteDatabase);
     }
 }
