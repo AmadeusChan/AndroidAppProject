@@ -37,6 +37,10 @@ public class CachedNewsList implements INewsList {
         //Log.d("cached list", "LIST SIZE "+list.size());
     }
 
+    public void setFilter0(INewsFilter filter0) {
+        this.filter0=filter0;
+    }
+
     @Override
     public void reset() {
         count=0;
