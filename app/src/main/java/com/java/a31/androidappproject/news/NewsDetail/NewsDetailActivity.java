@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.models.INewsDetail;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.io.File;
@@ -163,6 +164,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         mStarButton.setIcon(R.drawable.ic_star_white_24dp);
     }
 
+    // TODO: rewrite this function later
     @Override
     public void share(final INewsDetail newsDetail) {
         final Intent intent = new Intent();
@@ -171,6 +173,8 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         intent.setType("image/*");
         intent.putExtra("Kdescription", newsDetail.getTitle());
 
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+        ImageLoader.getInstance().init(config);
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
             @Override

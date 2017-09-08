@@ -8,12 +8,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.news.NewsList.NewsListFragment;
+import com.java.a31.androidappproject.search.SearchActivity;
+import com.lapism.searchview.SearchHistoryTable;
+import com.lapism.searchview.SearchItem;
 import com.lapism.searchview.SearchView;
 
 import butterknife.BindView;
@@ -23,7 +27,7 @@ import butterknife.ButterKnife;
  * Created by zwei on 2017/9/7.
  */
 
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     @BindView(R.id.search_view)
     SearchView mSearchView;
@@ -33,6 +37,8 @@ public class NewsFragment extends Fragment {
 
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
+
+    private static final String TAG = "NewsFragment";
 
     // TODO: Clean up this shit later.
     private static final int[] categories = {
@@ -65,7 +71,9 @@ public class NewsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.bind(this, view);
 
-        mViewPager.setAdapter(new NewsFragmentStatePagerAdapter(getChildFragmentManager(), view.getContext()));
+        mSearchView.setOnQueryTextListener(this);
+
+        mViewPager.setAdapter(new NewsFragmentStatePagerAdapter(getChildFragmentManager(), getContext()));
 
         for (int category : categories) {
             mTabLayout.addTab(mTabLayout.newTab().setText(category));
@@ -97,5 +105,18 @@ public class NewsFragment extends Fragment {
         public CharSequence getPageTitle (int position) {
             return mContext.getResources().getString(categories[position]);
         }
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        mSearchView.close(false);
+        SearchActivity.start(getContext(), query);
+        Log.d(TAG, "onQueryTextSubmit");
+        return true;
     }
 }

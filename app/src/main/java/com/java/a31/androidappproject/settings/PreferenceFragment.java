@@ -16,6 +16,10 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
 
     private static final String KEY_NIGHT_MODE = "night_mode";
 
+    public static PreferenceFragment newInstance() {
+        return new PreferenceFragment();
+    }
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.preference);

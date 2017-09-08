@@ -26,7 +26,7 @@ public class SettingsFragment extends Fragment {
 
         getChildFragmentManager()
                 .beginTransaction()
-                .replace(R.id.preference_container, new PreferenceFragment())
+                .replace(R.id.preference_container, PreferenceFragment.newInstance())
                 .commit();
 
         return view;

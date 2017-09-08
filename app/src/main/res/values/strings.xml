@@ -6,6 +6,7 @@
     <string name="get_news_detail_api">http://166.111.68.66:2042/news/action/query/detail</string>
 
     <string name="news_detail">News Detail</string>
+    <string name="search_result">Search Result</string>
 
     <string name="home">Home</string>
     <string name="favorite">Favorite</string>
