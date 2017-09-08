@@ -31,7 +31,7 @@ public class NewsManager {
         myDBHelper=new MyDBHelper(context);
     }
 
-    private boolean isConnectToInternet() {
+    boolean isConnectToInternet() {
         ConnectivityManager cm=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork!=null && activeNetwork.isConnectedOrConnecting();
@@ -66,9 +66,12 @@ public class NewsManager {
      * @return 返回值为一个INewsList接口，表示某一个新闻列表，具体方法可见该类的注释
      */
     public INewsList getLatestNews(int mode) {
+        /*
         if (!isConnectToInternet()) return getCachedNewsList();
         Log.d("internet", "online");
         return new NewsList(context, mode, NewsList.BASIC_URL_FOR_RAW_QUERY);
+        */
+        return new GeneralNewsList(mode, context);
     }
 
     /**
@@ -114,6 +117,7 @@ public class NewsManager {
      * @param newsDetail 要被取消收藏的新闻
      */
     public void setAsNotFavorite(INewsDetail newsDetail) {
+        Log.d("locate", "setAsNotFavorite");
         myDBHelper.deleteFavoriteNews(newsDetail.getID());
     }
 
