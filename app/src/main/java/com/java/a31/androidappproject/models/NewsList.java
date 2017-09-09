@@ -78,6 +78,7 @@ public class NewsList implements INewsList {
 
     @Override
     public void reset() {
+        Log.d("locate", "reset");
         showedNews.clear();
         currentPageNumber=1;
     }

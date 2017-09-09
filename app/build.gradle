@@ -11,6 +11,14 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs{
+        release {
+            storeFile file("key.jks")        //证书存放目录
+            storePassword "abc123456"                               //密码
+            keyAlias "key0"                                                //别名
+            keyPassword "abc123456"                                //密码(就是设置证书那两个密码，建议都填一样的)
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
