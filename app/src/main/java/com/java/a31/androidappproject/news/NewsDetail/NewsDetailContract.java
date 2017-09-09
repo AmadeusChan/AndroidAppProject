@@ -29,7 +29,7 @@ public interface NewsDetailContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadNewsDetail(String newsId);
+        void loadNewsDetail(String newsId, boolean isTextOnly);
 
         void onLikeButtonClick();
 

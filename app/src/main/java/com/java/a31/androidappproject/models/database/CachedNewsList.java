@@ -54,7 +54,7 @@ public class CachedNewsList implements INewsList {
         int len=newsList.size();
         for (int i=0; i<len; ++i) {
             INewsIntroduction newsIntroduction=newsList.get(i);
-            if (category!=-1 && !MyDBHelper.categoryList[category+1].equals(newsIntroduction.getClassTag())) continue;
+            if (category!=-1 && !MyDBHelper.categoryList[category-1].equals(newsIntroduction.getClassTag())) continue;
             if (filter.accept(newsIntroduction) && filter0.accept(newsIntroduction)) {
                 if (cnt>=(pageNo-1)*size && cnt<pageNo*size) list.add(newsIntroduction);
                 if ((++cnt)>=pageNo*size) break;

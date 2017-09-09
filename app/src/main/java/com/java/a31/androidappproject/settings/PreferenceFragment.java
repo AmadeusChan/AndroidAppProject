@@ -1,5 +1,6 @@
 package com.java.a31.androidappproject.settings;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
@@ -15,6 +16,9 @@ import com.java.a31.androidappproject.R;
 public class PreferenceFragment extends PreferenceFragmentCompat {
 
     private static final String KEY_NIGHT_MODE = "night_mode";
+    private static final String TEXT_ONLY_MODE = "no_image_mode";
+
+    private static final String KEY_NO_IMAGE_MODE = "no_image_mode";
 
     public static PreferenceFragment newInstance() {
         return new PreferenceFragment();
@@ -32,6 +36,19 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 }
+                getActivity().getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
+                getActivity().recreate();
+                return true;
+            }
+        });
+
+        findPreference(TEXT_ONLY_MODE).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener(){
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue){
+                boolean isTextOnly = (boolean) newValue;
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences(getString(R.string.text_only_mode),0).edit();
+                editor.putBoolean(getString(R.string.text_only_key), isTextOnly);
+                editor.commit();
                 getActivity().getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
                 getActivity().recreate();
                 return true;

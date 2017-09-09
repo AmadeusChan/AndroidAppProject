@@ -1,9 +1,11 @@
 package com.java.a31.androidappproject.search.SearchResult;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.news.NewsList.NewsListFragment;
 
 /**
@@ -33,7 +35,9 @@ public class SearchResultFragment extends NewsListFragment {
         super.onCreate(savedInstanceState);
 
         String query = getArguments().getString(KEY_QUERY);
-        new SearchResultPresenter(this, query);
+        SharedPreferences setting = this.getActivity().getSharedPreferences(getString(R.string.text_only_mode), 0);
+        boolean isTextOnly = setting.getBoolean(getString(R.string.text_only_key), false);
+        new SearchResultPresenter(this, query, isTextOnly);
     }
 
 }
