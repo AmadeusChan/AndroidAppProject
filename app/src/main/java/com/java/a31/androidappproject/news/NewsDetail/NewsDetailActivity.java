@@ -150,7 +150,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     public void onSuccess(INewsDetail newsDetail) {
         // TODO: accurate news content formation
         mCollapsingToolbarLayout.setTitle(newsDetail.getTitle());
-        newsContentView.setText(newsDetail.getContent().replaceAll(" 　　", "\n 　　"));
+        newsContentView.setText(newsDetail.getContent().replaceAll("。 +", "。\n"));
 
         List<String> imageList = newsDetail.getImages();
         if (imageList.size() > 0) {

@@ -57,6 +57,10 @@
             android:layout_height="match_parent"
             android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/body_text_size"
+            android:layout_marginTop="@dimen/primary_margin"
+            android:layout_marginBottom="@dimen/primary_margin"
+            android:layout_marginLeft="@dimen/primary_margin"
+            android:layout_marginRight="@dimen/primary_margin"
             android:lineSpacingMultiplier="1.2"/>
 
     </android.support.v4.widget.NestedScrollView>

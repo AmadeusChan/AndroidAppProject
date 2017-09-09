@@ -121,6 +121,7 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
 
         @Override
         public Fragment getItem(int position) {
+            Log.d(TAG, "getItem " + position);
             return NewsListFragment.newInstance(nameToCategory.get(names.get(position)));
         }
 
