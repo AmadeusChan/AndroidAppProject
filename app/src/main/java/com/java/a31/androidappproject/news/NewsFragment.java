@@ -22,6 +22,7 @@ import com.lapism.searchview.SearchView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by zwei on 2017/9/7.
@@ -116,7 +117,11 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
     public boolean onQueryTextSubmit(String query) {
         mSearchView.close(false);
         SearchActivity.start(getContext(), query);
-        Log.d(TAG, "onQueryTextSubmit");
         return true;
+    }
+
+    @OnClick(R.id.add_channel)
+    public void onClick(View view) {
+        Log.d(TAG, "onClick");
     }
 }

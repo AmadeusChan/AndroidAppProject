@@ -37,6 +37,8 @@ public interface NewsDetailContract {
 
         void onShareButtonCLick();
 
+        void stopReading();
+
     }
 
 }

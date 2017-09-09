@@ -35,6 +35,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static android.provider.LiveFolders.INTENT;
+
 /**
  * Created by zwei on 2017/9/7.
  */
@@ -100,6 +102,12 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     }
 
     @Override
+    protected void onStop() {
+        mPresenter.stopReading();
+        super.onStop();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.detail_menu, menu);
@@ -143,7 +151,9 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
         List<String> imageList = newsDetail.getImages();
         if (imageList.size() > 0) {
-            Glide.with(this).load(imageList.get(0)).into(newsImageView);
+            Glide.with(this)
+                    .load(imageList.get(0))
+                    .into(newsImageView);
         } else {
             newsImageView.setVisibility(View.GONE);
         }
@@ -170,29 +180,34 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         final Intent intent = new Intent();
 
         intent.setAction(Intent.ACTION_SEND);
-        intent.setType("image/*");
-        intent.putExtra("Kdescription", newsDetail.getTitle());
 
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
-        ImageLoader.getInstance().init(config);
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                Log.d(TAG, imageUri);
+        if (newsDetail.getImages().size() > 0) {
+            intent.setType("image/*").putExtra("Kdescription", newsDetail.getTitle());
 
-                try {
-                    File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-                    FileOutputStream out = new FileOutputStream(file);
-                    loadedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
-                    out.close();
-                    intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(NewsDetailActivity.this, "com.java.a31", file));
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+            ImageLoader.getInstance().init(config);
+            ImageLoader imageLoader = ImageLoader.getInstance();
+            imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    Log.d(TAG, imageUri);
+
+                    try {
+                        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+                        FileOutputStream out = new FileOutputStream(file);
+                        loadedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
+                        out.close();
+                        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(NewsDetailActivity.this, "com.java.a31", file));
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            intent.setType("text/plain").putExtra(Intent.EXTRA_TEXT, newsDetail.getTitle());
+            startActivity(intent);
+        }
     }
 
 }

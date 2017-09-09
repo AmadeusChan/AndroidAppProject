@@ -3,10 +3,12 @@ package com.java.a31.androidappproject.models;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.media.MediaCodec;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.java.a31.androidappproject.models.database.MyDBHelper;
@@ -14,6 +16,8 @@ import com.java.a31.androidappproject.models.database.MyDBHelper;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by amadeus on 9/5/17.
@@ -25,6 +29,60 @@ public class NewsManager {
     private Context context; // This reference should points to you MainActivity.getApplicationContext()
     private MediaPlayer mediaPlayer;
     private MyDBHelper myDBHelper;
+    private TtsTask ttsTask=null;
+
+    private class TtsTask extends AsyncTask<String, Void ,Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            //Pattern pattern=Pattern.compile("[^\\s，。]+");
+            Pattern pattern=Pattern.compile("(.{50}.*?(\\z|\\n|。|\\r\\n)|.{1,50}\\z|.{300,})");
+            Matcher matcher=pattern.matcher(strings[0]);
+            while (matcher.find()) {
+                if (isCancelled()) break;
+                String text=matcher.group();
+                Log.d("tts", "len"+text.length()+": "+text);
+                MediaPlayer mediaPlayer=new MediaPlayer();
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                String url = "http://api.voicerss.org/?key=812c49b5fc504ea59f257d3f120a822f&hl=zh-cn&src="+text;
+                try {
+                    mediaPlayer.setDataSource(url);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    mediaPlayer.prepare(); // might take long! (for buffering, etc)
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mediaPlayer.start();
+                do {
+                    if (isCancelled()) break;
+                } while (mediaPlayer.isPlaying());
+                mediaPlayer.release();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+    };
 
     private NewsManager(Context context) {
         this.context=context;
@@ -139,6 +197,17 @@ public class NewsManager {
      * @param text 要转成语音的文字
      */
     public void speakText(String text) {
+        stopSpeaking();
+        ttsTask= new TtsTask();
+        ttsTask.execute(text);
+    }
+
+    public void stopSpeaking() {
+        if (ttsTask!=null) ttsTask.cancel(true);
+    }
+
+    /*
+     public void speakText(String text) {
         String url = "http://api.voicerss.org/?key=812c49b5fc504ea59f257d3f120a822f&hl=zh-cn&src="+text;
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -154,6 +223,7 @@ public class NewsManager {
         }
         mediaPlayer.start();
     }
+     */
 
     /**
      * 该方法返回记录的分类列表设定
@@ -184,6 +254,11 @@ public class NewsManager {
      * @return
      */
     public INewsList getCachedNewsList() {
+        Log.d("locate", "getCachedNewsList()");
+        return myDBHelper.getCachedNewsList();
+    }
+
+    public INewsList getCachedNewsList(int mode) {
         Log.d("locate", "getCachedNewsList()");
         return myDBHelper.getCachedNewsList();
     }
