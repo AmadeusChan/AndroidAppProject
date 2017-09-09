@@ -1,8 +1,10 @@
 package com.java.a31.androidappproject.favorite.FavoriteNews;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.news.NewsList.NewsListFragment;
 
 /**
@@ -26,7 +28,9 @@ public class FavoriteNewsFragment extends NewsListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new FavoriteNewsPresenter(this);
+        SharedPreferences setting = this.getActivity().getSharedPreferences(getString(R.string.text_only_mode), 0);
+        boolean isTextOnly = setting.getBoolean(getString(R.string.text_only_key), false);
+        new FavoriteNewsPresenter(this,isTextOnly);
     }
 
 }

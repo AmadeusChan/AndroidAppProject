@@ -2,6 +2,7 @@ package com.java.a31.androidappproject.news.NewsDetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
@@ -118,7 +119,9 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
         // onCreateOptionsMenu is called after onCreate
         new NewsDetailPresenter(this);
-        mPresenter.loadNewsDetail(mNewsId);
+        SharedPreferences setting = getSharedPreferences(getString(R.string.text_only_mode), 0);
+        boolean isTextOnly = setting.getBoolean(getString(R.string.text_only_key), false);
+        mPresenter.loadNewsDetail(mNewsId, isTextOnly);
 
         return true;
     }
