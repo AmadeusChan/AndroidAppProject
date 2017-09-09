@@ -188,6 +188,11 @@ public class NewsManager {
         return myDBHelper.getCachedNewsList();
     }
 
+    public INewsList getCachedNewsList(int mode) {
+        Log.d("locate", "getCachedNewsList()");
+        return myDBHelper.getCachedNewsList();
+    }
+
     public INewsList searchNews(String keyWord, int mode) {
         return new NewsList(context, mode, NewsList.BASIC_URL_PREFIX_FOR_SEARCH+keyWord+"&");
     }
