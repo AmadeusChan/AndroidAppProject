@@ -1,14 +1,13 @@
 package com.java.a31.androidappproject.search;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.search.SearchResult.SearchResultFragment;
-import com.lapism.searchview.SearchView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,9 +17,6 @@ import butterknife.ButterKnife;
  */
 
 public class SearchActivity extends AppCompatActivity {
-
-    @BindView(R.id.result_search_view)
-    SearchView mSearchView;
 
     private static final String KEY_QUERY = "KEY_QUERY";
 

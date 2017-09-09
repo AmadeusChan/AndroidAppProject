@@ -87,8 +87,6 @@ public class NewsDetailPresenter implements NewsDetailContract.Presenter, INewsL
         if (mNewsDetail == null) {
             return;
         }
-        mNewsManager.speakText(mNewsDetail.getTitle());
-        mNewsManager.speakText(mNewsDetail.getAuthor());
         mNewsManager.speakText(mNewsDetail.getContent());
     }
 
@@ -98,6 +96,11 @@ public class NewsDetailPresenter implements NewsDetailContract.Presenter, INewsL
             return;
         }
         mView.share(mNewsDetail);
+    }
+
+    @Override
+    public void stopReading() {
+        mNewsManager.stopSpeaking();
     }
 
 }
