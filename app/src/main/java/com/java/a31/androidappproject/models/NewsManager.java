@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.java.a31.androidappproject.models.database.FavoriteNewsList;
+import com.java.a31.androidappproject.models.database.ImprovedFavoriteNewsList;
 import com.java.a31.androidappproject.models.database.MyDBHelper;
 
 import java.io.IOException;
@@ -185,7 +187,12 @@ public class NewsManager {
      * @return 收藏的新闻列表
      */
     public INewsList getFavoriteNews() {
-        return myDBHelper.getFavoriteNewsList();
+        return new ImprovedFavoriteNewsList(getSimpleFavoriteNews());
+        //return myDBHelper.getFavoriteNewsList();
+    }
+
+    public FavoriteNewsList getSimpleFavoriteNews() {
+        return (FavoriteNewsList) myDBHelper.getFavoriteNewsList();
     }
 
     public boolean isFavoriteNews(String ID) {
