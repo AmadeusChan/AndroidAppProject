@@ -18,6 +18,8 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
     private static final String KEY_NIGHT_MODE = "night_mode";
     private static final String TEXT_ONLY_MODE = "no_image_mode";
 
+    private static final String KEY_NO_IMAGE_MODE = "no_image_mode";
+
     public static PreferenceFragment newInstance() {
         return new PreferenceFragment();
     }
@@ -51,7 +53,6 @@ public class PreferenceFragment extends PreferenceFragmentCompat {
                 getActivity().recreate();
                 return true;
             }
-
         });
     }
 }

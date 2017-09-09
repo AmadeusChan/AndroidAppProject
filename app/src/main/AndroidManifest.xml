@@ -31,6 +31,10 @@
             android:label="@string/search_result"
             android:theme="@style/AppTheme" />
 
+        <activity android:name=".channel.ChannelActivity"
+            android:label="@string/channel"
+            android:theme="@style/AppTheme" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.java.a31"

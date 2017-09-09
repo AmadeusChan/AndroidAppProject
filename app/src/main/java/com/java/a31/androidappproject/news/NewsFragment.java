@@ -1,6 +1,7 @@
 package com.java.a31.androidappproject.news;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -14,11 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.java.a31.androidappproject.R;
+import com.java.a31.androidappproject.channel.ChannelActivity;
+import com.java.a31.androidappproject.models.NewsManager;
+import com.java.a31.androidappproject.models.NewsManagerNotInitializedException;
+import com.java.a31.androidappproject.models.database.MyDBHelper;
 import com.java.a31.androidappproject.news.NewsList.NewsListFragment;
 import com.java.a31.androidappproject.search.SearchActivity;
 import com.lapism.searchview.SearchHistoryTable;
 import com.lapism.searchview.SearchItem;
 import com.lapism.searchview.SearchView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,25 +52,7 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
 
     private static final String TAG = "NewsFragment";
 
-    // TODO: Clean up this shit later.
-    private static final int[] categories = {
-            R.string.latest,
-            R.string.technology,
-            R.string.education,
-            R.string.military,
-            R.string.domestic,
-            R.string.society,
-            R.string.culture,
-            R.string.car,
-            R.string.international,
-            R.string.sport,
-            R.string.economy,
-            R.string.health,
-            R.string.entertainment};
-
-    private static final int[] positionToCategory = {
-            -1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
-    };
+    private NewsFragmentStatePagerAdapter mPagerAdapter;
 
     static public NewsFragment newInstance() {
         return new NewsFragment();
@@ -74,37 +67,72 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
 
         mSearchView.setOnQueryTextListener(this);
 
-        mViewPager.setAdapter(new NewsFragmentStatePagerAdapter(getChildFragmentManager(), getContext()));
+        mPagerAdapter = new NewsFragmentStatePagerAdapter(getChildFragmentManager());
 
-        for (int category : categories) {
-            mTabLayout.addTab(mTabLayout.newTab().setText(category));
-        }
+        mViewPager.setAdapter(mPagerAdapter);
+
         mTabLayout.setupWithViewPager(mViewPager);
 
         return view;
     }
 
-    public static class NewsFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
-        private Context mContext;
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPagerAdapter.onResume();
+        mPagerAdapter.notifyDataSetChanged();
+    }
 
-        public NewsFragmentStatePagerAdapter(FragmentManager fm, Context context) {
+    public static class NewsFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
+
+        private static final String TAG = "PagerAdapter";
+
+        private static final String DEFAULT = "热点";
+
+        private static final Map<String, Integer> nameToCategory;
+
+        private NewsManager mNewsManager;
+
+        private List<String> names;
+
+        static {
+            Map<String, Integer> map = new HashMap<String, Integer>();
+            map.put(DEFAULT, -1);
+            for (int i = 0; i < MyDBHelper.categoryList.length; i++) {
+                map.put(MyDBHelper.categoryList[i], i + 1);
+            }
+            nameToCategory = Collections.unmodifiableMap(map);
+        }
+
+        public NewsFragmentStatePagerAdapter(FragmentManager fm) {
             super(fm);
-            mContext = context;
+            try {
+                mNewsManager = NewsManager.getInstance();
+            } catch (NewsManagerNotInitializedException e) {
+                Log.e(TAG, "NewsFragmentStatePagerAdapter", e);
+            }
+            onResume();
         }
 
         @Override
         public int getCount() {
-            return categories.length;
+            return names.size();
         }
 
         @Override
         public Fragment getItem(int position) {
-            return NewsListFragment.newInstance(positionToCategory[position]);
+            return NewsListFragment.newInstance(nameToCategory.get(names.get(position)));
         }
 
         @Override
         public CharSequence getPageTitle (int position) {
-            return mContext.getResources().getString(categories[position]);
+            return names.get(position);
+        }
+
+        public void onResume() {
+            names = new ArrayList<String>();
+            names.add(DEFAULT);
+            names.addAll(mNewsManager.getCategoryList());
         }
     }
 
@@ -122,6 +150,7 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
 
     @OnClick(R.id.add_channel)
     public void onClick(View view) {
-        Log.d(TAG, "onClick");
+        Intent intent = new Intent(getContext(), ChannelActivity.class);
+        startActivity(intent);
     }
 }
