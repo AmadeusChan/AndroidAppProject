@@ -23,12 +23,15 @@ public class NewsListPresenter implements NewsListContract.Presenter, INewsListe
 
     protected INewsList mNewsList;
 
-    public NewsListPresenter(NewsListContract.View view) {
+    public NewsListPresenter(NewsListContract.View view, boolean isTextOnly) {
         mView = view;
         mView.setPresenter(this);
 
         try {
-            mNewsList = NewsManager.getInstance().getLatestNews(INews.NORMAL_MODE);
+            if (isTextOnly)
+                mNewsList = NewsManager.getInstance().getLatestNews(INews.TEXT_ONLY_MODE);
+            else
+                mNewsList = NewsManager.getInstance().getLatestNews(INews.NORMAL_MODE);
         } catch (NewsManagerNotInitializedException e) {
             Log.e(TAG, "NewsListPresenter", e);
         }

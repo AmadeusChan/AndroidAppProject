@@ -16,8 +16,8 @@ public class SearchResultPresenter extends NewsListPresenter {
 
     private static final String TAG = "SearchResultPresenter";
 
-    public SearchResultPresenter(NewsListContract.View view, String query) {
-        super(view);
+    public SearchResultPresenter(NewsListContract.View view, String query, boolean mode) {
+        super(view, mode);
 
         try {
             mNewsList = NewsManager.getInstance().searchNews(query, INews.NORMAL_MODE);

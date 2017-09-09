@@ -19,6 +19,7 @@ import java.util.List;
  */
 
 public class NewsListAdapter extends BaseQuickAdapter<INewsIntroduction, BaseViewHolder> {
+
     public NewsListAdapter() {
         super(R.layout.item_news);
     }

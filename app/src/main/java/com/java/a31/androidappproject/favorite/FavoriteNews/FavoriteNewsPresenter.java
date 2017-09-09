@@ -15,8 +15,8 @@ public class FavoriteNewsPresenter extends NewsListPresenter {
 
     private static final String TAG = "FavoriteNewsPresenter";
 
-    public FavoriteNewsPresenter(NewsListContract.View view) {
-        super(view);
+    public FavoriteNewsPresenter(NewsListContract.View view, boolean mode) {
+        super(view, mode);
 
         try {
             mNewsList = NewsManager.getInstance().getFavoriteNews();

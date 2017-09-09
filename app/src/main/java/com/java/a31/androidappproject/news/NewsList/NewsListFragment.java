@@ -1,5 +1,6 @@
 package com.java.a31.androidappproject.news.NewsList;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -61,7 +62,9 @@ public class NewsListFragment extends Fragment implements NewsListContract.View,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new NewsListPresenter(this);
+        SharedPreferences setting = this.getActivity().getSharedPreferences(getString(R.string.text_only_mode), 0);
+        boolean isTextOnly = setting.getBoolean(getString(R.string.text_only_key), false);
+        new NewsListPresenter(this, isTextOnly);
         mCategory = getArguments().getInt(KEY_CATEGORY);
     }
 
