@@ -211,17 +211,6 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         newsContentView.setText(Html.fromHtml(content));
 
         newsContentView.setMovementMethod(LinkMovementMethod.getInstance());
-/*
-        if (imageList.size() > 0){
-            URLImageParser p = new URLImageParser(newsContentView, this);
-            String tmpText = newsDetail.getContent().replaceAll(" 　　", "\n 　　");
-            String htmlText = "<img src='" + imageList.get(0) + "'>" + tmpText.replaceAll("。 +", "。\n");
-            Spanned htmlSpan = Html.fromHtml(htmlText, p, null);
-            newsContentView.setText(htmlSpan);
-        } else {
-            newsContentView.setText(newsDetail.getContent().replaceAll(" 　　", "\n 　　"));
-        }
-*/
     }
 
     @Override
@@ -242,66 +231,36 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     // TODO: rewrite this function later
     @Override
     public void share(final INewsDetail newsDetail) {
-        try {
-            NewsManager newsManager = NewsManager.getInstance();
-            newsManager.share2Weibo(this, newsDetail.getURL(), newsDetail.getIntroduction(), newsDetail.getImages().get(0));
-        } catch (NewsManagerNotInitializedException e) {
-            Log.e(TAG, "share", e);
+        final Intent intent = new Intent();
+
+        intent.setAction(Intent.ACTION_SEND);
+
+        if (newsDetail.getImages().size() > 0) {
+            intent.setType("image/*").putExtra("Kdescription", newsDetail.getTitle());
+
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+            ImageLoader.getInstance().init(config);
+            ImageLoader imageLoader = ImageLoader.getInstance();
+            imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    Log.d(TAG, imageUri);
+
+                    try {
+                        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+                        FileOutputStream out = new FileOutputStream(file);
+                        loadedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
+                        out.close();
+                        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(NewsDetailActivity.this, "com.java.a31", file));
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            intent.setType("text/plain").putExtra(Intent.EXTRA_TEXT, newsDetail.getTitle());
+            startActivity(intent);
         }
-
-//        final Intent intent = new Intent();
-//
-//        intent.setAction(Intent.ACTION_SEND);
-//
-//        if (newsDetail.getImages().size() > 0) {
-//            intent.setType("image/*").putExtra("Kdescription", newsDetail.getTitle());
-//
-//            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
-//            ImageLoader.getInstance().init(config);
-//            ImageLoader imageLoader = ImageLoader.getInstance();
-//            imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
-//                @Override
-//                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                    Log.d(TAG, imageUri);
-//
-//                    try {
-//                        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-//                        FileOutputStream out = new FileOutputStream(file);
-//                        loadedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
-//                        out.close();
-//                        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(NewsDetailActivity.this, "com.java.a31", file));
-//                        startActivity(intent);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//        } else {
-//            intent.setType("text/plain").putExtra(Intent.EXTRA_TEXT, newsDetail.getTitle());
-//            startActivity(intent);
-//        }
     }
-
-    public Bitmap getImageBitmap(String url) {
-        System.out.println(url);
-        URL imgUrl = null;
-        Bitmap bitmap = null;
-        try {
-            imgUrl = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) imgUrl
-                    .openConnection();
-            conn.setDoInput(true);
-            conn.connect();
-            InputStream is = conn.getInputStream();
-            bitmap = BitmapFactory.decodeStream(is);
-            is.close();
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
-
 }
