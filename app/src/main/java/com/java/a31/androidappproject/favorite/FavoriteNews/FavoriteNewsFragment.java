@@ -26,6 +26,12 @@ public class FavoriteNewsFragment extends NewsListFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        onRefresh();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences setting = this.getActivity().getSharedPreferences(getString(R.string.text_only_mode), 0);

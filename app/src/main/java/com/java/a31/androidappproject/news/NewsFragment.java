@@ -25,6 +25,7 @@ import com.lapism.searchview.SearchHistoryTable;
 import com.lapism.searchview.SearchItem;
 import com.lapism.searchview.SearchView;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -65,6 +66,8 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.bind(this, view);
 
+        mSearchView.setNavigationIcon(R.drawable.ic_search_black_24dp);
+        mSearchView.setVoice(false);
         mSearchView.setOnQueryTextListener(this);
 
         mPagerAdapter = new NewsFragmentStatePagerAdapter(getChildFragmentManager());
@@ -145,7 +148,7 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
     @Override
     public boolean onQueryTextSubmit(String query) {
         mSearchView.close(false);
-        SearchActivity.start(getContext(), query);
+        SearchActivity.start(getContext(), URLEncoder.encode(query));
         return true;
     }
 
