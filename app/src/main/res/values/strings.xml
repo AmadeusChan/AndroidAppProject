@@ -48,4 +48,10 @@
 
     <string name="text_only_mode">TEXT_ONLY_MODE</string>
     <string name="text_only_key">TEXT_ONLY_KEY</string>
+
+    <string name="facebook_app_id">907954352694691</string>
+    <string name="weibo_app_key">2428964589</string>
+    <string name="app_secret">50040eee9857846554334ae7fd3786b4</string>
+    <string name="weibo_redirect_url">https://api.weibo.com/oauth2/default.html</string>
+
 </resources>

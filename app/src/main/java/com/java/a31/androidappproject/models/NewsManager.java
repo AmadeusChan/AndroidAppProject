@@ -11,9 +11,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.java.a31.androidappproject.models.database.FavoriteNewsList;
 import com.java.a31.androidappproject.models.database.ImprovedFavoriteNewsList;
 import com.java.a31.androidappproject.models.database.MyDBHelper;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -85,6 +87,13 @@ public class NewsManager {
             super.onCancelled();
         }
     };
+
+    private void InitImageLoader() {
+        ImageLoaderConfiguration imageLoaderConfiguration=new ImageLoaderConfiguration.Builder(context)
+                .memoryCacheExtraOptions(480, 800)
+                .build();
+        com.nostra13.universalimageloader.core.ImageLoader.getInstance().init(imageLoaderConfiguration);
+    }
 
     private NewsManager(Context context) {
         this.context=context;
