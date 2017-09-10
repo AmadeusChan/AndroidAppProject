@@ -90,6 +90,8 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
     private static final String KEY_NEWS_ID = "NEWS_ID";
 
+    private  static final String template = "<a href=http://www.baike.com/wiki/%s>%s</a>";
+
     private String mNewsId;
 
     private NewsDetailContract.Presenter mPresenter;
@@ -194,17 +196,20 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
             }
         }
 
-        String content = newsDetail.getContent().replaceAll("。 +", "。\n");
+        Log.d(TAG, newsDetail.getID());
+
+        String content = newsDetail.getContent().replaceAll("[ 　]+", "<br>&emsp;&emsp;");
+
         for (String keyword : newsDetail.getKeyWords()) {
-            content = content.replaceAll(keyword, "<a href=http://www.baike.com/wiki/" + keyword + ">" + keyword + "</a>");
+            content = content.replaceAll(keyword, String.format(template, keyword, keyword));
         }
 
         for (String location : newsDetail.getLocations()) {
-            content = content.replaceAll(location, "<a href=http://www.baike.com/wiki/" + location + ">" + location + "</a>");
+            content = content.replaceAll(location, String.format(template, location, location));
         }
 
         for (String person : newsDetail.getPersons()) {
-            content = content.replaceAll(person, "<a href=http://www.baike.com/wiki/" + person + ">" + person + "</a>");
+            content = content.replaceAll(person, String.format(person, person));
         }
 
         newsContentView.setText(Html.fromHtml(content));

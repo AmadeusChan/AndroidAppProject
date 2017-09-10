@@ -168,7 +168,7 @@ public class NewsManager {
         myDBHelper.insertReadNews(ID);
         if (!isConnectToInternet()) {
             NewsDetail newsDetail=(NewsDetail) myDBHelper.getFavoriteNewsDetails(ID);
-            if (mode==INews.TEXT_ONLY_MODE) {
+            if (mode==INews.TEXT_ONLY_MODE && newsDetail!=null) {
                 newsDetail.setImages(new ArrayList<String>());
             }
             listener.getResult(newsDetail);
