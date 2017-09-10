@@ -1,6 +1,8 @@
 package com.java.a31.androidappproject.main;
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -64,6 +66,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             mPresenter.switchNavigation(id);
         } else {
             mPresenter.switchNavigation(R.id.navigation_home);
+        }
+
+        try {
+            Signature[] sigs = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES).signatures;
+            for (Signature sig : sigs)
+            {
+                Log.d("MyApp", "Signature hashcode : " + sig.hashCode());
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

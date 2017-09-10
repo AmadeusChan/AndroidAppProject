@@ -14,12 +14,15 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -150,7 +153,23 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     public void onSuccess(INewsDetail newsDetail) {
         // TODO: accurate news content formation
         mCollapsingToolbarLayout.setTitle(newsDetail.getTitle());
-        newsContentView.setText(newsDetail.getContent().replaceAll("。 +", "。\n"));
+
+        String content = newsDetail.getContent().replaceAll("。 +", "。\n");
+        for (String keyword : newsDetail.getKeyWords()) {
+            content = content.replaceAll(keyword, "<a href=http://www.baike.com/wiki/" + keyword + ">" + keyword + "</a>");
+        }
+
+        for (String location : newsDetail.getLocations()) {
+            content = content.replaceAll(location, "<a href=http://www.baike.com/wiki/" + location + ">" + location + "</a>");
+        }
+
+        for (String person : newsDetail.getPersons()) {
+            content = content.replaceAll(person, "<a href=http://www.baike.com/wiki/" + person + ">" + person + "</a>");
+        }
+
+        newsContentView.setText(Html.fromHtml(content));
+
+        newsContentView.setMovementMethod(LinkMovementMethod.getInstance());
 
         List<String> imageList = newsDetail.getImages();
         if (imageList.size() > 0) {

@@ -61,6 +61,7 @@
             android:layout_marginBottom="@dimen/primary_margin"
             android:layout_marginLeft="@dimen/primary_margin"
             android:layout_marginRight="@dimen/primary_margin"
+            android:textColorLink="@android:color/holo_blue_dark"
             android:lineSpacingMultiplier="1.2"/>
 
     </android.support.v4.widget.NestedScrollView>
