@@ -20,6 +20,7 @@ import com.java.a31.androidappproject.models.INewsIntroduction;
 import com.java.a31.androidappproject.news.NewsDetail.NewsDetailActivity;
 import com.java.a31.androidappproject.news.NewsListAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -141,9 +142,11 @@ public class NewsListFragment extends Fragment implements NewsListContract.View,
         if (mPage == 1) {
             hideProgress();
 
-            mNewsListAdapter.setEnableLoadMore(true);
+            mNewsListAdapter.setNewData(new ArrayList<INewsIntroduction>());
+
+            enableLoadMore();
         } else {
-            mSwipeRefreshLayout.setEnabled(true);
+            enableRefresh();
 
             mNewsListAdapter.loadMoreFail();
         }
