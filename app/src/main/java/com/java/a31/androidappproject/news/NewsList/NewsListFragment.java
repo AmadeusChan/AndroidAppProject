@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +17,20 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.java.a31.androidappproject.R;
+import com.java.a31.androidappproject.models.INewsFilter;
 import com.java.a31.androidappproject.models.INewsIntroduction;
 import com.java.a31.androidappproject.news.NewsDetail.NewsDetailActivity;
 import com.java.a31.androidappproject.news.NewsListAdapter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by zwei on 2017/9/7.
@@ -49,6 +55,8 @@ public class NewsListFragment extends Fragment implements NewsListContract.View,
     private NewsListAdapter mNewsListAdapter;
 
     private LinearLayoutManager mLinearLayoutManager;
+
+    private SharedPreferences mSharedPreferences;
 
     public static NewsListFragment newInstance(int category) {
         Bundle args = new Bundle();
@@ -87,9 +95,31 @@ public class NewsListFragment extends Fragment implements NewsListContract.View,
         mRecyclerView.setAdapter(mNewsListAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), mLinearLayoutManager.getOrientation()));
 
+        mSharedPreferences = view.getContext().getSharedPreferences(NewsDetailActivity.KEY_BANNED, MODE_PRIVATE);
+
         onRefresh();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        final Set<String> banned = mSharedPreferences.getStringSet(NewsDetailActivity.KEY_BANNED, new HashSet<String>());
+        mPresenter.setFilter(new INewsFilter() {
+            @Override
+            public boolean accept(INewsIntroduction newsIntroduction) {
+                for (String keyword : banned) {
+                    if (newsIntroduction.getTitle().contains(keyword) || newsIntroduction.getIntroduction().contains(keyword)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+
+        onRefresh();
     }
 
     @Override

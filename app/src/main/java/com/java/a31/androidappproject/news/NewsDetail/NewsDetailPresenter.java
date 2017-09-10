@@ -65,10 +65,16 @@ public class NewsDetailPresenter implements NewsDetailContract.Presenter, INewsL
 
     @Override
     public void loadNewsDetail(String newsId, boolean isTextOnly) {
-        if (isTextOnly)
+        if (isTextOnly) {
             mNewsManager.getNewsDetails(newsId, INews.TEXT_ONLY_MODE, this);
-        else
+        } else {
             mNewsManager.getNewsDetails(newsId, INews.NORMAL_MODE, this);
+        }
+    }
+
+    @Override
+    public INewsDetail getNewsDetail() {
+        return mNewsDetail;
     }
 
     @Override

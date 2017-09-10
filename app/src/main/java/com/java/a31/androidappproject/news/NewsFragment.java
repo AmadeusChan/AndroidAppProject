@@ -2,6 +2,7 @@ package com.java.a31.androidappproject.news;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -16,9 +17,11 @@ import android.view.ViewGroup;
 
 import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.channel.ChannelActivity;
+import com.java.a31.androidappproject.models.NewsDetail;
 import com.java.a31.androidappproject.models.NewsManager;
 import com.java.a31.androidappproject.models.NewsManagerNotInitializedException;
 import com.java.a31.androidappproject.models.database.MyDBHelper;
+import com.java.a31.androidappproject.news.NewsDetail.NewsDetailActivity;
 import com.java.a31.androidappproject.news.NewsList.NewsListFragment;
 import com.java.a31.androidappproject.search.SearchActivity;
 import com.lapism.searchview.SearchHistoryTable;
@@ -29,12 +32,16 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by zwei on 2017/9/7.

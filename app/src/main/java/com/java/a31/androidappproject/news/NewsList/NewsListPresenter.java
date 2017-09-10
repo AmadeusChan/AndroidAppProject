@@ -3,6 +3,7 @@ package com.java.a31.androidappproject.news.NewsList;
 import android.util.Log;
 
 import com.java.a31.androidappproject.models.INews;
+import com.java.a31.androidappproject.models.INewsFilter;
 import com.java.a31.androidappproject.models.INewsIntroduction;
 import com.java.a31.androidappproject.models.INewsList;
 import com.java.a31.androidappproject.models.INewsListener;
@@ -19,7 +20,7 @@ public class NewsListPresenter implements NewsListContract.Presenter, INewsListe
 
     private static final String TAG = "NewsListPresenter";
 
-    protected NewsListContract.View mView;
+    private NewsListContract.View mView;
 
     protected INewsList mNewsList;
 
@@ -45,6 +46,11 @@ public class NewsListPresenter implements NewsListContract.Presenter, INewsListe
     @Override
     public void loadNewsList(int size, int pageNo, int category) {
         mNewsList.getMore(size, pageNo, category, this);
+    }
+
+    @Override
+    public void setFilter(INewsFilter filter) {
+        mNewsList.setFilter(filter);
     }
 
     @Override
