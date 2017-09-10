@@ -46,7 +46,8 @@ public class NewsManager {
         @Override
         protected Void doInBackground(String... strings) {
             //Pattern pattern=Pattern.compile("[^\\s，。]+");
-            Pattern pattern=Pattern.compile("(.{50}.*?(\\z|\\n|。|\\r\\n)|.{1,50}\\z|.{300,})");
+            //Pattern pattern=Pattern.compile("(.{50}.*?(\\z|\\n|。|\\r\\n)|.{1,50}\\z|.{300,})");
+            Pattern pattern=Pattern.compile("\\S+");
             Matcher matcher=pattern.matcher(strings[0]);
             while (matcher.find()) {
                 if (isCancelled()) break;
