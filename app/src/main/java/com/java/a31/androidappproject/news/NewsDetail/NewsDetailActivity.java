@@ -183,11 +183,10 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         }
 
         if (imageList.size() > 0){
-            final ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             int pos = 0;
             for(String url:imageList){
                 ImageView imageView = new ImageView(this);
-                //imageView.setLayoutParams(lp);
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 Glide.with(this)
                         .load(url)
                         .into(imageView);
