@@ -235,6 +235,14 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     // TODO: rewrite this function later
     @Override
     public void share(final INewsDetail newsDetail) {
+
+        try {
+            NewsManager instance = NewsManager.getInstance();
+            instance.share2Weibo(this, newsDetail.getURL(), newsDetail.getIntroduction(), newsDetail.getImages().get(0));
+        } catch (NewsManagerNotInitializedException e){
+
+        }
+
         final Intent intent = new Intent();
 
         intent.setAction(Intent.ACTION_SEND);
