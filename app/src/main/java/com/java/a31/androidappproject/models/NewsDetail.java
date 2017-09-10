@@ -26,6 +26,9 @@ public class NewsDetail extends NewsIntroduction implements INewsDetail {
 
     public void setContent(String content) {
         Content = content;
+        if (content.length()<=38) {
+            setIntroduction(content);
+        } else setIntroduction(content.substring(0,38)+"...");
     }
 
     @Override
