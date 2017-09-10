@@ -1,5 +1,6 @@
 package com.java.a31.androidappproject.models;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -11,9 +12,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.java.a31.androidappproject.models.database.FavoriteNewsList;
 import com.java.a31.androidappproject.models.database.ImprovedFavoriteNewsList;
 import com.java.a31.androidappproject.models.database.MyDBHelper;
+import com.java.a31.androidappproject.models.sharing.weibo.Share2Weibo;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,9 +90,18 @@ public class NewsManager {
         }
     };
 
+    private void InitImageLoader() {
+        ImageLoaderConfiguration imageLoaderConfiguration=new ImageLoaderConfiguration.Builder(context)
+                .memoryCacheExtraOptions(480, 800)
+                .build();
+        com.nostra13.universalimageloader.core.ImageLoader.getInstance().init(imageLoaderConfiguration);
+    }
+
     private NewsManager(Context context) {
         this.context=context;
         myDBHelper=new MyDBHelper(context);
+        InitImageLoader();
+        Share2Weibo.init(context);
     }
 
     boolean isConnectToInternet() {
@@ -282,6 +295,10 @@ public class NewsManager {
         String url="http://www.baike.com/wiki/"+keyWord;
         Uri uri=Uri.parse(url);
         context.startActivity(new Intent(Intent.ACTION_VIEW,uri));
+    }
+
+    public void share2Weibo(Activity activity, String url, String introduction, String image) {
+        Share2Weibo.share(activity, url, introduction, image);
     }
 
     // package-private

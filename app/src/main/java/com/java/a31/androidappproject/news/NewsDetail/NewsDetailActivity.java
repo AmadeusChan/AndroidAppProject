@@ -27,11 +27,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.models.INewsDetail;
+import com.java.a31.androidappproject.models.NewsManager;
+import com.java.a31.androidappproject.models.NewsManagerNotInitializedException;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -163,6 +166,23 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         // TODO: accurate news content formation
         mCollapsingToolbarLayout.setTitle(newsDetail.getTitle());
 
+        String content = newsDetail.getContent().replaceAll("。 +", "。\n");
+        for (String keyword : newsDetail.getKeyWords()) {
+            content = content.replaceAll(keyword, "<a href=http://www.baike.com/wiki/" + keyword + ">" + keyword + "</a>");
+        }
+
+        for (String location : newsDetail.getLocations()) {
+            content = content.replaceAll(location, "<a href=http://www.baike.com/wiki/" + location + ">" + location + "</a>");
+        }
+
+        for (String person : newsDetail.getPersons()) {
+            content = content.replaceAll(person, "<a href=http://www.baike.com/wiki/" + person + ">" + person + "</a>");
+        }
+
+        newsContentView.setText(Html.fromHtml(content));
+
+        newsContentView.setMovementMethod(LinkMovementMethod.getInstance());
+
         List<String> imageList = newsDetail.getImages();
         if (imageList.size() > 0) {
             Glide.with(this)
@@ -201,37 +221,44 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     // TODO: rewrite this function later
     @Override
     public void share(final INewsDetail newsDetail) {
-        final Intent intent = new Intent();
-
-        intent.setAction(Intent.ACTION_SEND);
-
-        if (newsDetail.getImages().size() > 0) {
-            intent.setType("image/*").putExtra("Kdescription", newsDetail.getTitle());
-
-            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
-            ImageLoader.getInstance().init(config);
-            ImageLoader imageLoader = ImageLoader.getInstance();
-            imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    Log.d(TAG, imageUri);
-
-                    try {
-                        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-                        FileOutputStream out = new FileOutputStream(file);
-                        loadedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
-                        out.close();
-                        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(NewsDetailActivity.this, "com.java.a31", file));
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } else {
-            intent.setType("text/plain").putExtra(Intent.EXTRA_TEXT, newsDetail.getTitle());
-            startActivity(intent);
+        try {
+            NewsManager newsManager = NewsManager.getInstance();
+            newsManager.share2Weibo(this, newsDetail.getURL(), newsDetail.getIntroduction(), newsDetail.getImages().get(0));
+        } catch (NewsManagerNotInitializedException e) {
+            Log.e(TAG, "share", e);
         }
+
+//        final Intent intent = new Intent();
+//
+//        intent.setAction(Intent.ACTION_SEND);
+//
+//        if (newsDetail.getImages().size() > 0) {
+//            intent.setType("image/*").putExtra("Kdescription", newsDetail.getTitle());
+//
+//            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+//            ImageLoader.getInstance().init(config);
+//            ImageLoader imageLoader = ImageLoader.getInstance();
+//            imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
+//                @Override
+//                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//                    Log.d(TAG, imageUri);
+//
+//                    try {
+//                        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+//                        FileOutputStream out = new FileOutputStream(file);
+//                        loadedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
+//                        out.close();
+//                        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(NewsDetailActivity.this, "com.java.a31", file));
+//                        startActivity(intent);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//        } else {
+//            intent.setType("text/plain").putExtra(Intent.EXTRA_TEXT, newsDetail.getTitle());
+//            startActivity(intent);
+//        }
     }
 
 }

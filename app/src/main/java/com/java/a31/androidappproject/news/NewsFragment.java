@@ -25,6 +25,7 @@ import com.lapism.searchview.SearchHistoryTable;
 import com.lapism.searchview.SearchItem;
 import com.lapism.searchview.SearchView;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -145,7 +146,7 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
     @Override
     public boolean onQueryTextSubmit(String query) {
         mSearchView.close(false);
-        SearchActivity.start(getContext(), query);
+        SearchActivity.start(getContext(), URLEncoder.encode(query));
         return true;
     }
 
