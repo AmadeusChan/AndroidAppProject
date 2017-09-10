@@ -238,7 +238,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
         try {
             NewsManager instance = NewsManager.getInstance();
-            instance.share2Weibo(this, newsDetail.getURL(), newsDetail.getIntroduction(), newsDetail.getImages().get(0));
+            instance.share2Weibo(this, newsDetail.getURL(), newsDetail.getContent().substring(0,30), newsDetail.getImages().get(0));
         } catch (NewsManagerNotInitializedException e){
 
         }
