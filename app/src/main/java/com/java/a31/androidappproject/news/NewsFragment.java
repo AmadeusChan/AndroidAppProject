@@ -66,6 +66,8 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         ButterKnife.bind(this, view);
 
+        mSearchView.setNavigationIcon(R.drawable.ic_search_black_24dp);
+        mSearchView.setVoice(false);
         mSearchView.setOnQueryTextListener(this);
 
         mPagerAdapter = new NewsFragmentStatePagerAdapter(getChildFragmentManager());
