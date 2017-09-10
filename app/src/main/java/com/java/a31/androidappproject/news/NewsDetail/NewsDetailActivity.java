@@ -220,7 +220,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
         Log.d(TAG, newsDetail.getID());
 
-        String content = newsDetail.getContent().replaceAll("[ 　]+", "<br>&emsp;&emsp;");
+        String content = newsDetail.getContent().replaceAll("[ 　]{2,}", "<br>&emsp;&emsp;");
 
         for (String keyword : newsDetail.getKeyWords()) {
             content = content.replaceAll(keyword, String.format(template, keyword, keyword));
