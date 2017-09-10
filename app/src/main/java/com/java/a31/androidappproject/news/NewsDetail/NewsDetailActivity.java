@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -26,6 +27,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -58,6 +61,9 @@ import static android.provider.LiveFolders.INTENT;
  */
 
 public class NewsDetailActivity extends AppCompatActivity implements NewsDetailContract.View {
+
+    @BindView(R.id.detail_layout)
+    LinearLayout newsLayout;
 
     @BindView(R.id.detail_content)
     TextView newsContentView;
@@ -166,6 +172,29 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         // TODO: accurate news content formation
         mCollapsingToolbarLayout.setTitle(newsDetail.getTitle());
 
+        List<String> imageList = newsDetail.getImages();
+        if (imageList.size() > 0) {
+            Glide.with(this)
+                    .load(imageList.get(0))
+                    .into(newsImageView);
+            imageList.remove(0);
+        } else {
+            newsImageView.setVisibility(View.GONE);
+        }
+
+        if (imageList.size() > 0){
+            final ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            int pos = 0;
+            for(String url:imageList){
+                ImageView imageView = new ImageView(this);
+                //imageView.setLayoutParams(lp);
+                Glide.with(this)
+                        .load(url)
+                        .into(imageView);
+                newsLayout.addView(imageView,pos++);
+            }
+        }
+
         String content = newsDetail.getContent().replaceAll("。 +", "。\n");
         for (String keyword : newsDetail.getKeyWords()) {
             content = content.replaceAll(keyword, "<a href=http://www.baike.com/wiki/" + keyword + ">" + keyword + "</a>");
@@ -182,25 +211,17 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         newsContentView.setText(Html.fromHtml(content));
 
         newsContentView.setMovementMethod(LinkMovementMethod.getInstance());
-
-        List<String> imageList = newsDetail.getImages();
-        if (imageList.size() > 0) {
-            Glide.with(this)
-                    .load(imageList.get(0))
-                    .into(newsImageView);
-            imageList.remove(0);
-        } else {
-            newsImageView.setVisibility(View.GONE);
-        }
+/*
         if (imageList.size() > 0){
             URLImageParser p = new URLImageParser(newsContentView, this);
-
-            String htmlText = "<img src='" + imageList.get(0) + "'>" + newsDetail.getContent().replaceAll("。 +", "。\n");
+            String tmpText = newsDetail.getContent().replaceAll(" 　　", "\n 　　");
+            String htmlText = "<img src='" + imageList.get(0) + "'>" + tmpText.replaceAll("。 +", "。\n");
             Spanned htmlSpan = Html.fromHtml(htmlText, p, null);
             newsContentView.setText(htmlSpan);
-        } else{
+        } else {
             newsContentView.setText(newsDetail.getContent().replaceAll(" 　　", "\n 　　"));
         }
+*/
     }
 
     @Override
@@ -261,91 +282,26 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 //        }
     }
 
-}
-
-class URLDrawable extends BitmapDrawable {
-    // the drawable that you need to set, you could set the initial drawing
-    // with the loading image if you need to
-    protected Drawable drawable;
-
-    @Override
-    public void draw(Canvas canvas) {
-        // override the draw to facilitate refresh function later
-        if(drawable != null) {
-            drawable.draw(canvas);
+    public Bitmap getImageBitmap(String url) {
+        System.out.println(url);
+        URL imgUrl = null;
+        Bitmap bitmap = null;
+        try {
+            imgUrl = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) imgUrl
+                    .openConnection();
+            conn.setDoInput(true);
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
-}
-
-class URLImageParser implements Html.ImageGetter {
-    Context c;
-    View container;
-
-    /***
-     * Construct the URLImageParser which will execute AsyncTask and refresh the container
-     * @param t
-     * @param c
-     */
-    public URLImageParser(View t, Context c) {
-        this.c = c;
-        this.container = t;
+        return bitmap;
     }
 
-    public Drawable getDrawable(String source) {
-        URLDrawable urlDrawable = new URLDrawable();
-
-        // get the actual source
-        ImageGetterAsyncTask asyncTask =
-                new ImageGetterAsyncTask( urlDrawable);
-
-        asyncTask.execute(source);
-
-        // return reference to URLDrawable where I will change with actual image from
-        // the src tag
-        return urlDrawable;
-    }
-
-    public class ImageGetterAsyncTask extends AsyncTask<String, Void, Drawable> {
-        URLDrawable urlDrawable;
-
-        public ImageGetterAsyncTask(URLDrawable d) {
-            this.urlDrawable = d;
-        }
-
-        @Override
-        protected Drawable doInBackground(String... params) {
-            String source = params[0];
-            return fetchDrawable(source);
-        }
-
-        @Override
-        protected void onPostExecute(Drawable result) {
-            // set the correct bound according to the result from HTTP call
-            urlDrawable.setBounds(0, 0, result.getIntrinsicWidth(), result.getIntrinsicHeight());
-
-            // change the reference of the current drawable to the result
-            // from the HTTP call
-            urlDrawable.drawable = result;
-
-            // redraw the image by invalidating the container
-            URLImageParser.this.container.invalidate();
-        }
-
-        /***
-         * Get the Drawable from URL
-         * @param urlString
-         * @return
-         */
-        public Drawable fetchDrawable(String urlString) {
-            try {
-                URL Url = new URL(urlString);
-                Drawable drawable = Drawable.createFromStream(Url.openStream(), "");
-                drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                return drawable;
-            } catch (Exception e) {
-                return null;
-            }
-        }
-
-    }
 }
