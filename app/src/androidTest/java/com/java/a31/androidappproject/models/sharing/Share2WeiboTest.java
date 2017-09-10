@@ -3,31 +3,31 @@ package com.java.a31.androidappproject.models.sharing;
 import android.app.Activity;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.java.a31.androidappproject.main.MainActivity;
+import com.java.a31.androidappproject.models.NewsManager;
 import com.java.a31.androidappproject.models.sharing.weibo.Share2Weibo;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * Created by amadeus on 9/9/17.
  */
-public class Share2WeiboTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class Share2WeiboTest {
     Context context;
     Activity activity;
+    NewsManager newsManager;
 
-    public Share2WeiboTest() {
-        super(MainActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
 
     @Before
     public void setUp() throws Exception {
-        context= InstrumentationRegistry.getTargetContext();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        activity=getActivity();
-        Share2Weibo.init(context);
     }
 
     @Test
