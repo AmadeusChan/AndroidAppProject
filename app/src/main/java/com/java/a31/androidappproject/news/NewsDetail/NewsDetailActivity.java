@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -15,12 +20,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +44,11 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,6 +61,9 @@ import static android.provider.LiveFolders.INTENT;
  */
 
 public class NewsDetailActivity extends AppCompatActivity implements NewsDetailContract.View {
+
+    @BindView(R.id.detail_layout)
+    LinearLayout newsLayout;
 
     @BindView(R.id.detail_content)
     TextView newsContentView;
@@ -156,6 +172,29 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         // TODO: accurate news content formation
         mCollapsingToolbarLayout.setTitle(newsDetail.getTitle());
 
+        List<String> imageList = newsDetail.getImages();
+        if (imageList.size() > 0) {
+            Glide.with(this)
+                    .load(imageList.get(0))
+                    .into(newsImageView);
+            imageList.remove(0);
+        } else {
+            newsImageView.setVisibility(View.GONE);
+        }
+
+        if (imageList.size() > 0){
+            final ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            int pos = 0;
+            for(String url:imageList){
+                ImageView imageView = new ImageView(this);
+                //imageView.setLayoutParams(lp);
+                Glide.with(this)
+                        .load(url)
+                        .into(imageView);
+                newsLayout.addView(imageView,pos++);
+            }
+        }
+
         String content = newsDetail.getContent().replaceAll("。 +", "。\n");
         for (String keyword : newsDetail.getKeyWords()) {
             content = content.replaceAll(keyword, "<a href=http://www.baike.com/wiki/" + keyword + ">" + keyword + "</a>");
@@ -172,13 +211,6 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         newsContentView.setText(Html.fromHtml(content));
 
         newsContentView.setMovementMethod(LinkMovementMethod.getInstance());
-
-        List<String> imageList = newsDetail.getImages();
-        if (imageList.size() > 0) {
-            Glide.with(this)
-                    .load(imageList.get(0))
-                    .into(newsImageView);
-        }
     }
 
     @Override
@@ -231,5 +263,4 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
             startActivity(intent);
         }
     }
-
 }
