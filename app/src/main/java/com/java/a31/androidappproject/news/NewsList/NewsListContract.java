@@ -2,6 +2,7 @@ package com.java.a31.androidappproject.news.NewsList;
 
 import com.java.a31.androidappproject.BasePresenter;
 import com.java.a31.androidappproject.BaseView;
+import com.java.a31.androidappproject.models.INewsFilter;
 import com.java.a31.androidappproject.models.INewsIntroduction;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public interface NewsListContract {
     interface Presenter extends BasePresenter {
 
         void loadNewsList(int size, int pageNo, int category);
+
+        void setFilter(INewsFilter filter);
 
     }
 

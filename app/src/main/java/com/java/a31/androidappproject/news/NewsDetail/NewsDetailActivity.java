@@ -49,7 +49,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,11 +82,15 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     @BindView(R.id.collapsing_toolbar_layout)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
 
+    public static final String KEY_BANNED = "BANNED";
+
     private MenuItem mShareButton;
 
     private MenuItem mStarButton;
 
     private MenuItem mReadButton;
+
+    private MenuItem mBanItem;
 
     private static final String TAG = "NewsDetailActivity";
 
@@ -95,6 +101,10 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     private String mNewsId;
 
     private NewsDetailContract.Presenter mPresenter;
+
+    private boolean isBanned = false;
+
+    private SharedPreferences mSharedPreferences;
 
     public static void start(Context context, String newsId) {
         Intent intent = new Intent(context, NewsDetailActivity.class);
@@ -123,6 +133,8 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         });
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mSharedPreferences = getSharedPreferences(KEY_BANNED, MODE_PRIVATE);
     }
 
     @Override
@@ -139,6 +151,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         mStarButton = menu.findItem(R.id.star);
         mShareButton = menu.findItem(R.id.share);
         mReadButton = menu.findItem(R.id.read);
+        mBanItem = menu.findItem(R.id.ban);
 
         // onCreateOptionsMenu is called after onCreate
         new NewsDetailPresenter(this);
@@ -163,6 +176,15 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
                 return true;
             case R.id.read:
                 mPresenter.onReadButtonClick();
+                return true;
+            case R.id.ban:
+                if (isBanned) {
+                    setUnBan();
+                    isBanned = false;
+                } else {
+                    setBan();
+                    isBanned = true;
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -215,6 +237,19 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         newsContentView.setText(Html.fromHtml(content));
 
         newsContentView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        Set<String> banned = mSharedPreferences.getStringSet(KEY_BANNED, new HashSet<String>());
+        for (String keyword : newsDetail.getKeyWords()) {
+            if (banned.contains(keyword)) {
+                isBanned = true;
+                setBan();
+                break;
+            }
+        }
+        if (banned.contains(newsDetail.getTitle())) {
+            isBanned = true;
+            setBan();
+        }
     }
 
     @Override
@@ -230,6 +265,34 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     @Override
     public void setUnLike() {
         mStarButton.setIcon(R.drawable.ic_star_white_24dp);
+    }
+
+    @Override
+    public void setBan() {
+        mBanItem.setIcon(R.drawable.ic_not_interested_red_24dp);
+
+        INewsDetail newsDetail = mPresenter.getNewsDetail();
+
+        if (newsDetail != null && newsDetail.getKeyWords().size() > 1) {
+            Set<String> banned = mSharedPreferences.getStringSet(KEY_BANNED, new HashSet<String>());
+            banned.add(newsDetail.getKeyWords().get(0));
+            banned.add(newsDetail.getTitle());
+            mSharedPreferences.edit().putStringSet(KEY_BANNED, banned).apply();
+        }
+    }
+
+    @Override
+    public void setUnBan() {
+        mBanItem.setIcon(R.drawable.ic_not_interested_white_24dp);
+
+        INewsDetail newsDetail = mPresenter.getNewsDetail();
+
+        if (newsDetail != null && newsDetail.getKeyWords().size() > 1) {
+            Set<String> banned = mSharedPreferences.getStringSet(KEY_BANNED, new HashSet<String>());
+            banned.remove(newsDetail.getKeyWords().get(0));
+            banned.remove(newsDetail.getTitle());
+            mSharedPreferences.edit().putStringSet(KEY_BANNED, banned).apply();
+        }
     }
 
     // TODO: rewrite this function later
