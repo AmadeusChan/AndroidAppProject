@@ -33,7 +33,7 @@ public class ChannelPresenter implements ChannelContract.Presenter {
         try {
             mNewsManager = NewsManager.getInstance();
         } catch (NewsManagerNotInitializedException e) {
-            Log.e(TAG, "ChannelPresenter", e);
+            Log.d(TAG, "ChannelPresenter", e);
         }
     }
 
