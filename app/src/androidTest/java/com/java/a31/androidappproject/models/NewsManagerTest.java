@@ -2,6 +2,7 @@ package com.java.a31.androidappproject.models;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.core.deps.guava.base.Strings;
 import android.util.Log;
 
 import org.junit.Before;
@@ -137,6 +138,39 @@ public class NewsManagerTest {
         //NewsManager.getInstance().jump2Baike("上海");
         //NewsManager.getInstance().jump2Baike("村上春树");
         NewsManager.getInstance().jump2Baike("海明威");
+    }
+
+    @Test
+    public void getReadKeywords() throws Exception {
+        NewsManager.getInstance().getNewsDetails("20160913041301d5fc6a41214a149cd8a0581d3a014f", INews.NORMAL_MODE, new INewsListener<INewsDetail>() {
+            @Override
+            public void getResult(INewsDetail result) {
+                try {
+                    List<String> list=NewsManager.getInstance().getReadKeywords();
+                    for (String i: list) {
+                        Log.d("keyword", i);
+                    }
+                } catch (NewsManagerNotInitializedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        Thread.sleep(10000);
+    }
+
+    @Test
+    public void getRecommendedNewsList() throws Exception {
+        INewsList newsList=NewsManager.getInstance().getRecommendedNewsList(INews.NORMAL_MODE);
+        newsList.getMore(50, new INewsListener<List<INewsIntroduction>>() {
+            @Override
+            public void getResult(List<INewsIntroduction> result) {
+                for (INewsIntroduction i: result) {
+                    Log.d("recommendation", i.getTitle());
+                }
+                Log.d("recommendation", "hello world!");
+            }
+        });
+        Thread.sleep(5000);
     }
 
 }

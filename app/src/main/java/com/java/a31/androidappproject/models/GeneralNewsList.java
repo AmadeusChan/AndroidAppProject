@@ -38,6 +38,19 @@ public class GeneralNewsList implements INewsList {
         reset();
     }
 
+    public void addFilter0(final INewsFilter filter) {
+        INewsFilter mergedFilter=new INewsFilter() {
+            INewsFilter filterX=filter0;
+            INewsFilter filterY=filter;
+            @Override
+            public boolean accept(INewsIntroduction newsIntroduction) {
+                return filterX.accept(newsIntroduction) && filterY.accept(newsIntroduction);
+            }
+        };
+        filter0=mergedFilter;
+        reset();
+    }
+
     @Override
     public void reset() {
         onlineList=new NewsList(context, mode, NewsList.BASIC_URL_FOR_RAW_QUERY);

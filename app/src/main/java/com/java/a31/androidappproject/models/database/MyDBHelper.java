@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import com.java.a31.androidappproject.models.INewsDetail;
@@ -21,7 +22,7 @@ import java.util.List;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME="NewsDatabase.db";
-    public static final int VERSION=6;
+    public static final int VERSION=7;
 
     // about category list
     public static final String CATEGORY_LIST_TABLE_NAME="category_list_table";
@@ -77,6 +78,10 @@ public class MyDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(
                 "create table if not exists "+CachedNewsListManager.TABLE+" ("+CachedNewsListManager.ID_COLUMN+" text, "+
                         CachedNewsListManager.INTRODUCTION_COLUMN+" text)"
+        );
+
+        sqLiteDatabase.execSQL(
+                "create table if not exists "+ReadKeywordManager.TABLE+" ("+ReadKeywordManager.NAME+" text)"
         );
     }
 
@@ -207,6 +212,14 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     public INewsList getCachedNewsList(int mode) {
         return CachedNewsListManager.getCachedNewsList(mode, this.getReadableDatabase());
+    }
+
+    public void addReadKeyword(String keyWord) {
+        ReadKeywordManager.addReadKeyword(keyWord, this.getWritableDatabase());
+    }
+
+    public List<String> getReadKeywords() {
+        return ReadKeywordManager.getReadKeywords(this.getReadableDatabase());
     }
 
 }

@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.java.a31.androidappproject.models.database.MyDBHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,8 +57,17 @@ class NewsDetailFetcherFromInternet {
                     array=reader.getJSONArray("Keywords");
                     for (int i=0; i<array.length(); ++i) {
                         keyWords.add(array.getJSONObject(i).getString("word"));
+                        //Log.d("keyword", array.getJSONObject(i).getString("word"));
                     }
                     detail.setKeyWords(keyWords);
+
+                    for (int i=0; i<10 && i<keyWords.size(); ++i) {
+                        try {
+                            NewsManager.getInstance().addReadKeyword(keyWords.get(i));
+                        } catch (NewsManagerNotInitializedException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                     String content=reader.getString("news_Content");
                     detail.setContent(content);

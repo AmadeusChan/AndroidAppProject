@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.media.MediaCodec;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,7 +11,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.android.volley.toolbox.ImageLoader;
+import com.java.a31.androidappproject.models.Recommendation.NewsRecommendationManager;
 import com.java.a31.androidappproject.models.database.FavoriteNewsList;
 import com.java.a31.androidappproject.models.database.ImprovedFavoriteNewsList;
 import com.java.a31.androidappproject.models.database.MyDBHelper;
@@ -105,7 +104,7 @@ public class NewsManager {
         Share2Weibo.init(context);
     }
 
-    boolean isConnectToInternet() {
+    public boolean isConnectToInternet() {
         ConnectivityManager cm=(ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork!=null && activeNetwork.isConnectedOrConnecting();
@@ -302,6 +301,17 @@ public class NewsManager {
         Share2Weibo.share(activity, url, introduction, image);
     }
 
+    public INewsList getRecommendedNewsList(int mode) {
+        //return null;
+        try {
+            INewsList newsList= NewsRecommendationManager.getRecommendedNewsList(mode);
+            return newsList;
+        } catch (NewsManagerNotInitializedException e) {
+            e.printStackTrace();
+            return getLatestNews(mode);
+        }
+    }
+
     // package-private
     boolean addReadNews(String ID) {
         return myDBHelper.insertReadNews(ID);
@@ -314,6 +324,14 @@ public class NewsManager {
 
     boolean add2CachedNewsList(INewsIntroduction newsIntroduction) {
         return myDBHelper.add2CachedNewsList(newsIntroduction);
+    }
+
+    public void addReadKeyword(String keyword) {
+        myDBHelper.addReadKeyword(keyword);
+    }
+
+    public List<String> getReadKeywords() {
+        return myDBHelper.getReadKeywords();
     }
 
 }
