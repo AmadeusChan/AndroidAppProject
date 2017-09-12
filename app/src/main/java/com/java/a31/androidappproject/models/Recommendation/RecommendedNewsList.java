@@ -1,6 +1,7 @@
 package com.java.a31.androidappproject.models.Recommendation;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.java.a31.androidappproject.models.GeneralNewsList;
 import com.java.a31.androidappproject.models.INewsFilter;
@@ -26,11 +27,13 @@ public class RecommendedNewsList implements INewsList {
     private String keywords;
     private int mode;
     private NewsManager newsManager;
+    Context context;
     //private INewsFilter filter0;
 
-    RecommendedNewsList(String keywords, int mode) {
+    RecommendedNewsList(String keywords, int mode, Context context) {
         this.keywords=keywords;
         this.mode=mode;
+        this.context=context;
         try {
             newsManager=NewsManager.getInstance();
         } catch (NewsManagerNotInitializedException e) {
@@ -60,8 +63,18 @@ public class RecommendedNewsList implements INewsList {
 
     @Override
     public void reset() {
+        Log.d("keyword", "reset");
         //showedNews.clear();
-        keywordNewsList=(NewsList) newsManager.searchNews(keywords, mode);
+        try {
+            keywords=NewsRecommendationManager.getRecommendedKeywords(mode);
+        } catch (NewsManagerNotInitializedException e) {
+            e.printStackTrace();
+        }
+        if (keywords.equals("")) {
+            keywordNewsList=new NewsList(context, mode, NewsList.BASIC_URL_FOR_RAW_QUERY);
+        } else {
+            keywordNewsList=(NewsList) newsManager.searchNews(keywords, mode);
+        }
         latestNewsList=(GeneralNewsList) newsManager.getLatestNews(mode);
         /*
         keywordNewsList.setFilter0(filter0);
@@ -71,6 +84,7 @@ public class RecommendedNewsList implements INewsList {
 
     @Override
     public void getMore(int size, INewsListener<List<INewsIntroduction>> listener) {
+        Log.d("keyword", "locate getMore");
         if (newsManager.isConnectToInternet()) {
             keywordNewsList.getMore(size, listener);
         } else {
@@ -80,6 +94,8 @@ public class RecommendedNewsList implements INewsList {
 
     @Override
     public void getMore(int size, int pageNo, int category, INewsListener<List<INewsIntroduction>> listener) {
+        Log.d("keyword", "getMore size="+size+" pageNo="+pageNo);
+        if (pageNo==1) reset();
         if (newsManager.isConnectToInternet()) {
             keywordNewsList.getMore(size, pageNo, category, listener);
         } else {

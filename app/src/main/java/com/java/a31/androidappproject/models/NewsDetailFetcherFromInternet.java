@@ -61,7 +61,7 @@ class NewsDetailFetcherFromInternet {
                     }
                     detail.setKeyWords(keyWords);
 
-                    for (int i=0; i<10 && i<keyWords.size(); ++i) {
+                    for (int i=0; i<13 && i<keyWords.size(); ++i) {
                         try {
                             NewsManager.getInstance().addReadKeyword(keyWords.get(i));
                         } catch (NewsManagerNotInitializedException e) {

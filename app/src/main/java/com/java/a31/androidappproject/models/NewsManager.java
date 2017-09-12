@@ -302,9 +302,11 @@ public class NewsManager {
     }
 
     public INewsList getRecommendedNewsList(int mode) {
+        Log.d("keyword", "locate: getRecommendedNewsList");
         //return null;
         try {
-            INewsList newsList= NewsRecommendationManager.getRecommendedNewsList(mode);
+            INewsList newsList= NewsRecommendationManager.getRecommendedNewsList(mode, context);
+            //INewsList newsList=searchNews(NewsRecommendationManager.getRecommendedKeywords(mode), mode);
             return newsList;
         } catch (NewsManagerNotInitializedException e) {
             e.printStackTrace();
@@ -327,6 +329,7 @@ public class NewsManager {
     }
 
     public void addReadKeyword(String keyword) {
+        Log.d("keyword", "addReadKeyword "+keyword);
         myDBHelper.addReadKeyword(keyword);
     }
 

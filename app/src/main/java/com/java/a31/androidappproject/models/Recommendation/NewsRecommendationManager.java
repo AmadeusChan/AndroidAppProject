@@ -1,5 +1,6 @@
 package com.java.a31.androidappproject.models.Recommendation;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -38,11 +39,12 @@ class Pair implements Comparable<Pair> {
 
 public class NewsRecommendationManager {
 
-    public static INewsList getRecommendedNewsList(int mode) throws NewsManagerNotInitializedException {
+    public static String getRecommendedKeywords(int mode) throws NewsManagerNotInitializedException {
         NewsManager newsManager=NewsManager.getInstance();
         List<String> keywords=newsManager.getReadKeywords();
         List<Pair> pairs=new ArrayList<>();
         int cnt=0;
+        Collections.shuffle(keywords);
         Collections.sort(keywords);
         for (int i=0; i<keywords.size(); ++i) {
             ++cnt;
@@ -51,17 +53,27 @@ public class NewsRecommendationManager {
                 cnt=0;
             }
         }
-        //Log.d("keyword", keywords.toString());
+        Log.d("keyword", keywords.toString());
+        Collections.shuffle(pairs);
         Collections.sort(pairs);
         String query="";
         for (int i=0; i<8 && i<pairs.size(); ++i) {
             query+=pairs.get(i).getStr();
         }
-        Log.d("keyword", query);
+        Log.d("keyword", "The final query is: " + query);
+        return query;
+        /*
         if (query.equals("")) return newsManager.getLatestNews(mode);
         return new RecommendedNewsList(query, mode);
+        */
         //return query;
         //return newsManager.searchNews(query, mode);
+    }
+
+    public static INewsList getRecommendedNewsList(int mode, Context context) throws NewsManagerNotInitializedException {
+        String query=getRecommendedKeywords(mode);
+        //if (query.equals("")) return NewsManager.getInstance().getLatestNews(mode);
+        return new RecommendedNewsList(query, mode, context);
     }
 
 }
