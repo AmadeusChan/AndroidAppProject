@@ -49,7 +49,7 @@ public class NewsListPresenter implements NewsListContract.Presenter, INewsListe
     public void loadNewsList(int size, int pageNo, int category) {
         if (category == 0) {
             try {
-                mNewsList = NewsRecommendationManager.getRecommendedNewsList(isTextOnly ? INews.TEXT_ONLY_MODE : INews.NORMAL_MODE);
+                mNewsList = NewsManager.getInstance().getRecommendedNewsList(isTextOnly ? INews.TEXT_ONLY_MODE : INews.NORMAL_MODE);
             } catch (NewsManagerNotInitializedException e) {
                 Log.e(TAG, "loadNewsList", e);
             }

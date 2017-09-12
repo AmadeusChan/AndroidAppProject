@@ -1,6 +1,7 @@
 package com.java.a31.androidappproject.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.java.a31.androidappproject.models.database.CachedNewsList;
 
@@ -14,22 +15,24 @@ import java.util.List;
 public class GeneralNewsList implements INewsList {
     private HashSet<String> showedNews;
     private NewsList onlineList;
-    private CachedNewsList offlineList;
+    private INewsList offlineList;
     private int mode;
     private Context context;
-    private INewsFilter filter0;
+    //private INewsFilter filter0;
     private NewsManager newsManager;
 
     GeneralNewsList(int mode, Context context) {
         this.mode=mode;
         this.context=context;
         showedNews=new HashSet<>();
+        /*
         filter0=new INewsFilter() {
             @Override
             public boolean accept(INewsIntroduction newsIntroduction) {
                 return !showedNews.contains(newsIntroduction.getID());
             }
         };
+        */
         try {
             this.newsManager=NewsManager.getInstance();
         } catch (NewsManagerNotInitializedException e) {
@@ -38,6 +41,7 @@ public class GeneralNewsList implements INewsList {
         reset();
     }
 
+    /*
     public void addFilter0(final INewsFilter filter) {
         INewsFilter mergedFilter=new INewsFilter() {
             INewsFilter filterX=filter0;
@@ -50,18 +54,19 @@ public class GeneralNewsList implements INewsList {
         filter0=mergedFilter;
         reset();
     }
+    */
 
     @Override
     public void reset() {
         onlineList=new NewsList(context, mode, NewsList.BASIC_URL_FOR_RAW_QUERY);
         try {
-            offlineList=(CachedNewsList) NewsManager.getInstance().getCachedNewsList();
+            Log.d("keyword", "x");
+            offlineList=NewsManager.getInstance().getCachedNewsList(mode);
+            Log.d("keyword", "y");
         } catch (NewsManagerNotInitializedException e) {
             e.printStackTrace();
         }
         showedNews.clear();
-        onlineList.setFilter0(filter0);
-        offlineList.setFilter0(filter0);
     }
 
     @Override

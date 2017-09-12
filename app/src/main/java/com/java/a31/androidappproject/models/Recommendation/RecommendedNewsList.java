@@ -75,7 +75,10 @@ public class RecommendedNewsList implements INewsList {
         } else {
             keywordNewsList=(NewsList) newsManager.searchNews(keywords, mode);
         }
+        Log.d("keyword", "a");
         latestNewsList=(GeneralNewsList) newsManager.getLatestNews(mode);
+        Log.d("keyword", "b");
+        Log.d("keyword", "reset finished");
         /*
         keywordNewsList.setFilter0(filter0);
         latestNewsList.addFilter0(filter0);
@@ -84,12 +87,13 @@ public class RecommendedNewsList implements INewsList {
 
     @Override
     public void getMore(int size, INewsListener<List<INewsIntroduction>> listener) {
-        Log.d("keyword", "locate getMore");
+        Log.d("test", "locate getMore");
         if (newsManager.isConnectToInternet()) {
             keywordNewsList.getMore(size, listener);
         } else {
             latestNewsList.getMore(size, listener);
         }
+        Log.d("test", "locate getMore finished");
     }
 
     @Override

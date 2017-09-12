@@ -273,14 +273,16 @@ public class NewsManager {
      * 该方法返回所有缓存下来的新闻列表，离线状态下该方法也可以使用，缓存下来的新闻指所有在getLatestNews中网络访问获得的新闻
      * @return
      */
+    /*
     public INewsList getCachedNewsList() {
         Log.d("locate", "getCachedNewsList()");
         return myDBHelper.getCachedNewsList();
     }
+    */
 
     public INewsList getCachedNewsList(int mode) {
         Log.d("locate", "getCachedNewsList()");
-        return myDBHelper.getCachedNewsList();
+        return myDBHelper.getCachedNewsList(mode);
     }
 
     public INewsList searchNews(String keyWord, int mode) {
@@ -305,6 +307,7 @@ public class NewsManager {
         Log.d("keyword", "locate: getRecommendedNewsList");
         //return null;
         try {
+            //INewsList newsList=NewsManager.getInstance().getLatestNews(mode);
             INewsList newsList= NewsRecommendationManager.getRecommendedNewsList(mode, context);
             //INewsList newsList=searchNews(NewsRecommendationManager.getRecommendedKeywords(mode), mode);
             return newsList;

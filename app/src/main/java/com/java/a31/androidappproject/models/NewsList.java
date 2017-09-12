@@ -92,6 +92,7 @@ public class NewsList implements INewsList {
 
     @Override
     public void getMore(int size, int pageNo, int category, final INewsListener<List<INewsIntroduction>> listener) {
+        Log.d("test", "getMoreA");
         //String url="http://166.111.68.66:2042/news/action/query/latest"+"?pageNo="+pageNo+"&pageSize="+size+"&category="+category;
         String url=basicURL+"?pageNo="+pageNo+"&pageSize="+size+"&category="+category;
         Log.d("url", url);
@@ -179,6 +180,7 @@ public class NewsList implements INewsList {
         );
         RequestQueue queue= Volley.newRequestQueue(context);
         queue.add(request);
+        Log.d("test", "getMoreB");
     }
 
     private void needMore(final INewsListener<List<INewsIntroduction>> listener) {

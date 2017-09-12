@@ -44,7 +44,6 @@ public class NewsRecommendationManager {
         List<String> keywords=newsManager.getReadKeywords();
         List<Pair> pairs=new ArrayList<>();
         int cnt=0;
-        Collections.shuffle(keywords);
         Collections.sort(keywords);
         for (int i=0; i<keywords.size(); ++i) {
             ++cnt;
@@ -54,7 +53,7 @@ public class NewsRecommendationManager {
             }
         }
         Log.d("keyword", keywords.toString());
-        Collections.shuffle(pairs);
+        //Collections.shuffle(pairs);
         Collections.sort(pairs);
         String query="";
         for (int i=0; i<8 && i<pairs.size(); ++i) {

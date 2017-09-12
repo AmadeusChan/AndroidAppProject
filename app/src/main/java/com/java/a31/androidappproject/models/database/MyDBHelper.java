@@ -207,12 +207,14 @@ public class MyDBHelper extends SQLiteOpenHelper {
         return CachedNewsListManager.add2CachedNewsList(newsIntroduction, this.getWritableDatabase());
     }
 
+    /*
     public INewsList getCachedNewsList() {
         return CachedNewsListManager.getCachedNewsList(this.getReadableDatabase());
     }
+    */
 
     public INewsList getCachedNewsList(int mode) {
-        return CachedNewsListManager.getCachedNewsList(mode, this.getReadableDatabase());
+        return CachedNewsListManager.getImprovedCachedNewsList(mode, this.getReadableDatabase());
     }
 
     public void addReadKeyword(String keyWord) {

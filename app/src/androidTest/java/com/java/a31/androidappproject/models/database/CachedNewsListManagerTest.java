@@ -39,7 +39,7 @@ public class CachedNewsListManagerTest {
             @Override
             public void getResult(List<INewsIntroduction> result) {
                 Log.d("cached list", "got result!");
-                INewsList newsList1=newsManager.getCachedNewsList();
+                INewsList newsList1=newsManager.getCachedNewsList(INews.NORMAL_MODE);
                 newsList1.getMore(1000, new INewsListener<List<INewsIntroduction>>() {
                     @Override
                     public void getResult(List<INewsIntroduction> result) {
@@ -63,7 +63,7 @@ public class CachedNewsListManagerTest {
 
     @Test
     public void getCachedNewsList() throws Exception {
-        INewsList newsList1=newsManager.getCachedNewsList();
+        INewsList newsList1=newsManager.getCachedNewsList(INews.NORMAL_MODE);
         newsList1.getMore(10000, new INewsListener<List<INewsIntroduction>>() {
             @Override
             public void getResult(List<INewsIntroduction> result) {

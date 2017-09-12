@@ -59,6 +59,11 @@ class CachedNewsListManager {
         return new CachedNewsList(list);
     }
 
+    static INewsList getImprovedCachedNewsList(int mode, SQLiteDatabase sqLiteDatabase) {
+        Cursor cursor=sqLiteDatabase.rawQuery("select * from "+TABLE, null);
+        return new ImprovedCachedNewsList(mode, cursor);
+    }
+
     static INewsList getCachedNewsList(SQLiteDatabase sqLiteDatabase) {
         return getCachedNewsList(INews.NORMAL_MODE, sqLiteDatabase);
     }
