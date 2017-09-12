@@ -99,6 +99,8 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
 
         private static final String DEFAULT = "热点";
 
+        private static final String RECOMMAND = "推荐";
+
         private static final Map<String, Integer> nameToCategory;
 
         private NewsManager mNewsManager;
@@ -108,6 +110,7 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
         static {
             Map<String, Integer> map = new HashMap<String, Integer>();
             map.put(DEFAULT, -1);
+            map.put(RECOMMAND, 0);
             for (int i = 0; i < MyDBHelper.categoryList.length; i++) {
                 map.put(MyDBHelper.categoryList[i], i + 1);
             }
@@ -143,6 +146,7 @@ public class NewsFragment extends Fragment implements SearchView.OnQueryTextList
         public void onResume() {
             names = new ArrayList<String>();
             names.add(DEFAULT);
+            names.add(RECOMMAND);
             names.addAll(mNewsManager.getCategoryList());
         }
     }
