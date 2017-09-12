@@ -66,7 +66,7 @@ public class NewsList implements INewsList {
         this.basicURL=basicURL;
     }
 
-    void setFilter0(INewsFilter filter0) {
+    public void setFilter0(INewsFilter filter0) {
         this.filter0 = filter0;
     }
 
