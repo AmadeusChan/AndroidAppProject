@@ -305,12 +305,13 @@ public class NewsManager {
 
     public INewsList getRecommendedNewsList(int mode) {
         Log.d("keyword", "locate: getRecommendedNewsList");
+        //return getCachedNewsList(mode);
         //return null;
         try {
             //INewsList newsList=NewsManager.getInstance().getLatestNews(mode);
-            INewsList newsList= NewsRecommendationManager.getRecommendedNewsList(mode, context);
+            return NewsRecommendationManager.getRecommendedNewsList(mode, context);
+            //return NewsManager.getInstance().getLatestNews(mode);
             //INewsList newsList=searchNews(NewsRecommendationManager.getRecommendedKeywords(mode), mode);
-            return newsList;
         } catch (NewsManagerNotInitializedException e) {
             e.printStackTrace();
             return getLatestNews(mode);

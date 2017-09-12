@@ -31,6 +31,7 @@ public class RecommendedNewsList implements INewsList {
     //private INewsFilter filter0;
 
     RecommendedNewsList(String keywords, int mode, Context context) {
+        Log.d("location", "RecommendedNewsList begin");
         this.keywords=keywords;
         this.mode=mode;
         this.context=context;
@@ -54,6 +55,7 @@ public class RecommendedNewsList implements INewsList {
         };
         */
         reset();
+        Log.d("location", "RecommendedNewsList end");
     }
 
     @Override
@@ -63,6 +65,7 @@ public class RecommendedNewsList implements INewsList {
 
     @Override
     public void reset() {
+        Log.d("location", "reset begin");
         Log.d("keyword", "reset");
         //showedNews.clear();
         try {
@@ -83,10 +86,12 @@ public class RecommendedNewsList implements INewsList {
         keywordNewsList.setFilter0(filter0);
         latestNewsList.addFilter0(filter0);
         */
+        Log.d("location", "reset end");
     }
 
     @Override
     public void getMore(int size, INewsListener<List<INewsIntroduction>> listener) {
+        Log.d("location", "getMore0 begin");
         Log.d("test", "locate getMore");
         if (newsManager.isConnectToInternet()) {
             keywordNewsList.getMore(size, listener);
@@ -94,10 +99,12 @@ public class RecommendedNewsList implements INewsList {
             latestNewsList.getMore(size, listener);
         }
         Log.d("test", "locate getMore finished");
+        Log.d("location", "getMore0 end");
     }
 
     @Override
     public void getMore(int size, int pageNo, int category, INewsListener<List<INewsIntroduction>> listener) {
+        Log.d("location", "getMore1 begin");
         Log.d("keyword", "getMore size="+size+" pageNo="+pageNo);
         if (pageNo==1) reset();
         if (newsManager.isConnectToInternet()) {
@@ -105,11 +112,14 @@ public class RecommendedNewsList implements INewsList {
         } else {
             latestNewsList.getMore(size, listener);
         }
+        Log.d("location", "getMore1 end");
     }
 
     @Override
     public void getMore(int size, int pageNo, INewsListener<List<INewsIntroduction>> listener) {
+        Log.d("location", "getMore2 begin");
         getMore(size, pageNo, -1, listener);
+        Log.d("location", "getMore2 end");
     }
 
 }
