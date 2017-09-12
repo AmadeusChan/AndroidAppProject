@@ -9,6 +9,7 @@ import com.java.a31.androidappproject.models.INewsList;
 import com.java.a31.androidappproject.models.INewsListener;
 import com.java.a31.androidappproject.models.NewsManager;
 import com.java.a31.androidappproject.models.NewsManagerNotInitializedException;
+import com.java.a31.androidappproject.models.Recommendation.NewsRecommendationManager;
 
 import java.util.List;
 
@@ -22,17 +23,18 @@ public class NewsListPresenter implements NewsListContract.Presenter, INewsListe
 
     private NewsListContract.View mView;
 
+    private boolean isTextOnly;
+
     protected INewsList mNewsList;
 
     public NewsListPresenter(NewsListContract.View view, boolean isTextOnly) {
         mView = view;
         mView.setPresenter(this);
 
+        this.isTextOnly = isTextOnly;
+
         try {
-            if (isTextOnly)
-                mNewsList = NewsManager.getInstance().getLatestNews(INews.TEXT_ONLY_MODE);
-            else
-                mNewsList = NewsManager.getInstance().getLatestNews(INews.NORMAL_MODE);
+            mNewsList = NewsManager.getInstance().getLatestNews(isTextOnly ? INews.TEXT_ONLY_MODE : INews.NORMAL_MODE);
         } catch (NewsManagerNotInitializedException e) {
             Log.e(TAG, "NewsListPresenter", e);
         }
@@ -45,7 +47,16 @@ public class NewsListPresenter implements NewsListContract.Presenter, INewsListe
 
     @Override
     public void loadNewsList(int size, int pageNo, int category) {
-        mNewsList.getMore(size, pageNo, category, this);
+        if (category == 0) {
+            try {
+                mNewsList = NewsRecommendationManager.getRecommendedNewsList(isTextOnly ? INews.TEXT_ONLY_MODE : INews.NORMAL_MODE);
+            } catch (NewsManagerNotInitializedException e) {
+                Log.e(TAG, "loadNewsList", e);
+            }
+            mNewsList.getMore(size, this);
+        } else {
+            mNewsList.getMore(size, pageNo, category, this);
+        }
     }
 
     @Override
