@@ -37,8 +37,8 @@ public class NewsList implements INewsList {
     public static String BASIC_URL_FOR_RAW_QUERY="http://166.111.68.66:2042/news/action/query/latest";
     public static String BASIC_URL_PREFIX_FOR_SEARCH="http://166.111.68.66:2042/news/action/query/search?keyword=";
 
-    private final int PAGE_SIZE=500;
-    private final int PAGE_NUM=500;
+    private final int PAGE_SIZE=100;
+    private final int PAGE_NUM=100;
 
     private HashSet<String> showedNews=new HashSet<String>();
     private INewsFilter filter=new INewsFilter() {
@@ -166,7 +166,6 @@ public class NewsList implements INewsList {
                                 e.printStackTrace();
                             }
                         }
-                        long seed=System.nanoTime();
                         Collections.shuffle(list);
                         listener.getResult(list);
                     }
@@ -193,7 +192,6 @@ public class NewsList implements INewsList {
                     e.printStackTrace();
                 }
             }
-            long seed=System.nanoTime();
             Collections.shuffle(buffer);
             listener.getResult(buffer);
         } else {
@@ -211,6 +209,9 @@ public class NewsList implements INewsList {
                     }
                     if (sizeNeed>0) {
                         ++currentPageNumber;
+                    }
+                    if (result.size()==0) {
+                        sizeNeed=0;
                     }
                     needMore(listener);
                 }

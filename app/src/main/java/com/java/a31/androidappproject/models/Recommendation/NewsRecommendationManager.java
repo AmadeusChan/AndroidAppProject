@@ -57,7 +57,7 @@ public class NewsRecommendationManager {
         Collections.sort(pairs);
         String query="";
         for (int i=0; i<8 && i<pairs.size(); ++i) {
-            query+=pairs.get(i).getStr();
+            query+=pairs.get(i).getStr()+"_";
         }
         Log.d("keyword", "The final query is: " + query);
         return query;

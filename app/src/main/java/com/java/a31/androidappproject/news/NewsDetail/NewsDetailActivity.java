@@ -231,7 +231,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
         }
 
         for (String person : newsDetail.getPersons()) {
-            content = content.replaceAll(person, String.format(person, person));
+            content = content.replaceAll(person, String.format(template, person, person));
         }
 
         newsContentView.setText(Html.fromHtml(content));

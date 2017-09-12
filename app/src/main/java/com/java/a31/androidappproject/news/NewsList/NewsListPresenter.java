@@ -53,6 +53,7 @@ public class NewsListPresenter implements NewsListContract.Presenter, INewsListe
             } catch (NewsManagerNotInitializedException e) {
                 Log.e(TAG, "loadNewsList", e);
             }
+            if (pageNo==1) mNewsList.reset();
             mNewsList.getMore(size, this);
         } else {
             mNewsList.getMore(size, pageNo, category, this);

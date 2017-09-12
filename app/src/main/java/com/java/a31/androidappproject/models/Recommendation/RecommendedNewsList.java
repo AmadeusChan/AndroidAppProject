@@ -27,6 +27,7 @@ public class RecommendedNewsList implements INewsList {
     private String keywords;
     private int mode;
     private NewsManager newsManager;
+    private List<INewsIntroduction> buffer;
     Context context;
     //private INewsFilter filter0;
 
@@ -90,11 +91,29 @@ public class RecommendedNewsList implements INewsList {
     }
 
     @Override
-    public void getMore(int size, INewsListener<List<INewsIntroduction>> listener) {
+    public void getMore(final int size, final INewsListener<List<INewsIntroduction>> listener) {
         Log.d("location", "getMore0 begin");
         Log.d("test", "locate getMore");
         if (newsManager.isConnectToInternet()) {
-            keywordNewsList.getMore(size, listener);
+            keywordNewsList.getMore(size, new INewsListener<List<INewsIntroduction>>() {
+                @Override
+                public void getResult(List<INewsIntroduction> result) {
+                    if (result.size()==size) {
+                        listener.getResult(result);
+                    } else {
+                        int re=size-result.size();
+                        buffer=result;
+                        latestNewsList.getMore(re, new INewsListener<List<INewsIntroduction>>() {
+                            @Override
+                            public void getResult(List<INewsIntroduction> result) {
+                                buffer.addAll(result);
+                                listener.getResult(buffer);
+                            }
+                        });
+                    }
+                }
+            });
+            //keywordNewsList.getMore(size, listener);
         } else {
             latestNewsList.getMore(size, listener);
         }
@@ -110,7 +129,7 @@ public class RecommendedNewsList implements INewsList {
         if (newsManager.isConnectToInternet()) {
             keywordNewsList.getMore(size, pageNo, category, listener);
         } else {
-            latestNewsList.getMore(size, listener);
+            latestNewsList.getMore(size, pageNo, category, listener);
         }
         Log.d("location", "getMore1 end");
     }
