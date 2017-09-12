@@ -22,7 +22,7 @@ import java.util.List;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME="NewsDatabase.db";
-    public static final int VERSION=7;
+    public static final int VERSION=18;
 
     // about category list
     public static final String CATEGORY_LIST_TABLE_NAME="category_list_table";
@@ -91,6 +91,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("drop table if exists "+FAVORITE_LIST_TABLE_NAME);
         sqLiteDatabase.execSQL("drop table if exists "+READ_NEWS_TABLE);
         sqLiteDatabase.execSQL("drop table if exists "+CachedNewsListManager.TABLE);
+        sqLiteDatabase.execSQL("drop table if exists "+ReadKeywordManager.TABLE);
         onCreate(sqLiteDatabase);
     }
 

@@ -22,8 +22,10 @@ import org.json.JSONObject;
 import java.net.ConnectException;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,7 +62,7 @@ public class NewsList implements INewsList {
 
     private String basicURL;
 
-    NewsList(Context context, int mode, String basicURL) {
+    public NewsList(Context context, int mode, String basicURL) {
         this.context=context;
         this.mode=mode;
         this.basicURL=basicURL;
@@ -163,6 +165,8 @@ public class NewsList implements INewsList {
                                 e.printStackTrace();
                             }
                         }
+                        long seed=System.nanoTime();
+                        Collections.shuffle(list);
                         listener.getResult(list);
                     }
                 },
@@ -187,6 +191,8 @@ public class NewsList implements INewsList {
                     e.printStackTrace();
                 }
             }
+            long seed=System.nanoTime();
+            Collections.shuffle(buffer);
             listener.getResult(buffer);
         } else {
             getMore(PAGE_SIZE, currentPageNumber, new INewsListener<List<INewsIntroduction>>(){

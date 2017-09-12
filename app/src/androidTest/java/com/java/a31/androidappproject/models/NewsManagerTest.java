@@ -142,7 +142,7 @@ public class NewsManagerTest {
 
     @Test
     public void getReadKeywords() throws Exception {
-        NewsManager.getInstance().getNewsDetails("20160913041301d5fc6a41214a149cd8a0581d3a014f", INews.NORMAL_MODE, new INewsListener<INewsDetail>() {
+        NewsManager.getInstance().getNewsDetails("2016091304132ef74ee0256847d28f4212ddca84fb26", INews.NORMAL_MODE, new INewsListener<INewsDetail>() {
             @Override
             public void getResult(INewsDetail result) {
                 try {
@@ -155,7 +155,7 @@ public class NewsManagerTest {
                 }
             }
         });
-        Thread.sleep(10000);
+        Thread.sleep(2000);
     }
 
     @Test
@@ -165,7 +165,7 @@ public class NewsManagerTest {
             @Override
             public void getResult(List<INewsIntroduction> result) {
                 for (INewsIntroduction i: result) {
-                    Log.d("recommendation", i.getTitle());
+                    Log.d("recommendation", i.getID() + ":" + i.getTitle());
                 }
                 Log.d("recommendation", "hello world!");
             }
