@@ -43,6 +43,19 @@
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:id="@+id/share_to_timeline"
+        android:paddingLeft="@dimen/primary_margin"
+        android:paddingRight="@dimen/primary_margin"
+        android:text="@string/share_to_moment"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorPrimaryText"
+        android:drawableLeft="@drawable/ic_moment"
+        android:drawablePadding="@dimen/primary_margin"
+        android:tint="@color/colorPrimaryText" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
         android:id="@+id/share_to_weibo"
         android:paddingLeft="@dimen/primary_margin"
         android:paddingRight="@dimen/primary_margin"

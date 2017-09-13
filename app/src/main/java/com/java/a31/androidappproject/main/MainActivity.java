@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         // Initialize NewsManager::context
         NewsManager.getInstance(getApplicationContext());
 
-        NewsManager.getInstance(getApplicationContext()).share2Wechat(
-                "https://www.apple.com", "This is iPhone X", "https://cdn.vox-cdn.com/uploads/chorus_image/image/56645405/iphone_x_gallery1_2017.0.jpeg", Share2Wechat.SHARE_TO_TIMELINE
-        );
+//        NewsManager.getInstance(getApplicationContext()).share2Wechat(
+//                "https://www.apple.com", "This is iPhone X", null, Share2Wechat.SHARE_TO_TIMELINE
+//        );
 
         new MainPresenter(this);
 

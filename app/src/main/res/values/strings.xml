@@ -25,6 +25,7 @@
 
     <string name="share_to_wechat">Share to WeChat</string>
     <string name="share_to_weibo">Share to Weibo</string>
+    <string name="share_to_moment">Share to timeline</string>
     <string name="more_options">More options</string>
 
     <string name="latest">Latest</string>

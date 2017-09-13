@@ -2,6 +2,7 @@ package com.java.a31.androidappproject.models.sharing.wechat;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
 
@@ -16,7 +17,9 @@ import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * Created by amadeus on 9/10/17.
@@ -37,6 +40,24 @@ public class Share2Wechat {
     private static Bitmap getWxShareBitmap(Bitmap targetBitmap) {
         float scale = Math.min((float) 150 / targetBitmap.getWidth(), (float) 150 / targetBitmap.getHeight());
         Bitmap fixedBmp = Bitmap.createScaledBitmap(targetBitmap, (int) (scale * targetBitmap.getWidth()), (int) (scale * targetBitmap.getHeight()), false);
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        fixedBmp.compress(Bitmap.CompressFormat.JPEG, 100, output);
+        int options = 100;
+        while (output.toByteArray().length > 30 * 1024 && options != 10) {
+            output.reset(); //清空baos
+            fixedBmp.compress(Bitmap.CompressFormat.JPEG, options, output);//这里压缩options%，把压缩后的数据存放到baos中
+            options -= 10;
+        }
+
+        byte[] result = output.toByteArray();
+        try {
+            output.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return fixedBmp;
     }
 
@@ -47,9 +68,10 @@ public class Share2Wechat {
         WXMediaMessage wxMediaMessage=new WXMediaMessage();
         wxMediaMessage.mediaObject=wxWebpageObject;
         wxMediaMessage.description=introduction;
+        wxMediaMessage.title=introduction;
 
         if (image!=null) {
-            Bitmap thumbBmp=Bitmap.createScaledBitmap(image, 150, 150, true);
+            Bitmap thumbBmp=getWxShareBitmap(image);
             image.recycle();
             wxMediaMessage.thumbData= bmpToByteArray(thumbBmp, true);
         }
@@ -81,6 +103,8 @@ public class Share2Wechat {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Log.d("bmpToByteArray", result.length / 1024 + "");
 
         return result;
     }

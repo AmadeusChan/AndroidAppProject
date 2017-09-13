@@ -40,6 +40,7 @@ import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.models.INewsDetail;
 import com.java.a31.androidappproject.models.NewsManager;
 import com.java.a31.androidappproject.models.NewsManagerNotInitializedException;
+import com.java.a31.androidappproject.models.sharing.wechat.Share2Wechat;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -203,21 +204,28 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
             Glide.with(this)
                     .load(imageList.get(0))
                     .into(newsImageView);
-            imageList.remove(0);
         } else {
             newsImageView.setVisibility(View.GONE);
         }
 
         if (imageList.size() > 0){
-            int pos = 0;
-            for(String url:imageList){
+            for (int i = 1, pos = 0; i < imageList.size(); i++, pos++) {
                 ImageView imageView = new ImageView(this);
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 Glide.with(this)
-                        .load(url)
+                        .load(imageList.get(i))
                         .into(imageView);
-                newsLayout.addView(imageView,pos++);
+                newsLayout.addView(imageView, pos);
             }
+//            int pos = 0;
+//            for (String url:imageList){
+//                ImageView imageView = new ImageView(this);
+//                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                Glide.with(this)
+//                        .load(url)
+//                        .into(imageView);
+//                newsLayout.addView(imageView,pos++);
+//            }
         }
 
         Log.d(TAG, newsDetail.getID());
@@ -307,6 +315,7 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
 
         AppCompatTextView wechat = view.findViewById(R.id.share_to_wechat);
         AppCompatTextView weibo = view.findViewById(R.id.share_to_weibo);
+        AppCompatTextView timeline = view.findViewById(R.id.share_to_timeline);
         AppCompatTextView more = view.findViewById(R.id.more_options);
 
         final NewsManager instance = NewsManager.getInstance(getApplicationContext());
@@ -331,7 +340,21 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
                 if (newsDetail.getImages().size() > 0) {
                     image = newsDetail.getImages().get(0);
                 }
-//                instance.share2Wechat(NewsDetailActivity.this, newsDetail.getURL(), newsDetail.getIntroduction(), image);
+                instance.share2Wechat(newsDetail.getURL(), newsDetail.getIntroduction(), image, Share2Wechat.SHARE_TO_FRIEND);
+            }
+        });
+
+        timeline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                String image = null;
+                if (newsDetail.getImages().size() > 0) {
+                    image = newsDetail.getImages().get(0);
+                    Log.d(TAG, image);
+                }
+                Log.d(TAG, newsDetail.getIntroduction());
+                instance.share2Wechat(newsDetail.getURL(), newsDetail.getIntroduction(), image, Share2Wechat.SHARE_TO_TIMELINE);
             }
         });
 
