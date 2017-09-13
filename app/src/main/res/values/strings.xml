@@ -23,6 +23,10 @@
     <string name="read">Read</string>
     <string name="ban">Ban</string>
 
+    <string name="share_to_wechat">Share to WeChat</string>
+    <string name="share_to_weibo">Share to Weibo</string>
+    <string name="more_options">More options</string>
+
     <string name="latest">Latest</string>
     <string name="technology">Technology</string>
     <string name="education">Education</string>

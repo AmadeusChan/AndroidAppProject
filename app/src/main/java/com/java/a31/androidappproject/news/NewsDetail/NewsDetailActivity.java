@@ -12,11 +12,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -299,44 +301,79 @@ public class NewsDetailActivity extends AppCompatActivity implements NewsDetailC
     @Override
     public void share(final INewsDetail newsDetail) {
 
-        try {
-            NewsManager instance = NewsManager.getInstance();
-            List<String> images=newsDetail.getImages();
-            instance.share2Weibo(this, newsDetail.getURL(), newsDetail.getIntroduction(), images.size()>0?images.get(0):null);
-        } catch (NewsManagerNotInitializedException e){
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
 
-        }
+        View view = getLayoutInflater().inflate(R.layout.actions_details_sheet, null);
 
-        final Intent intent = new Intent();
+        AppCompatTextView wechat = view.findViewById(R.id.share_to_wechat);
+        AppCompatTextView weibo = view.findViewById(R.id.share_to_weibo);
+        AppCompatTextView more = view.findViewById(R.id.more_options);
 
-        intent.setAction(Intent.ACTION_SEND);
+        final NewsManager instance = NewsManager.getInstance(getApplicationContext());
 
-        if (newsDetail.getImages().size() > 0) {
-            intent.setType("image/*").putExtra("Kdescription", newsDetail.getTitle());
-
-            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
-            ImageLoader.getInstance().init(config);
-            ImageLoader imageLoader = ImageLoader.getInstance();
-            imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
-                @Override
-                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                    Log.d(TAG, imageUri);
-
-                    try {
-                        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
-                        FileOutputStream out = new FileOutputStream(file);
-                        loadedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
-                        out.close();
-                        intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(NewsDetailActivity.this, "com.java.a31", file));
-                        startActivity(intent);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+        weibo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                String image = null;
+                if (newsDetail.getImages().size() > 0) {
+                    image = newsDetail.getImages().get(0);
                 }
-            });
-        } else {
-            intent.setType("text/plain").putExtra(Intent.EXTRA_TEXT, newsDetail.getTitle());
-            startActivity(intent);
-        }
+                instance.share2Weibo(NewsDetailActivity.this, newsDetail.getURL(), newsDetail.getIntroduction(), image);
+            }
+        });
+
+        wechat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                String image = null;
+                if (newsDetail.getImages().size() > 0) {
+                    image = newsDetail.getImages().get(0);
+                }
+//                instance.share2Wechat(NewsDetailActivity.this, newsDetail.getURL(), newsDetail.getIntroduction(), image);
+            }
+        });
+
+        more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+                final Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+
+                if (newsDetail.getImages().size() > 0) {
+                    intent.setType("image/*").putExtra("Kdescription", newsDetail.getTitle());
+
+                    ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext()).build();
+                    ImageLoader.getInstance().init(config);
+                    ImageLoader imageLoader = ImageLoader.getInstance();
+                    imageLoader.loadImage(newsDetail.getImages().get(0), new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            Log.d(TAG, imageUri);
+
+                            try {
+                                File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+                                FileOutputStream out = new FileOutputStream(file);
+                                loadedImage.compress(Bitmap.CompressFormat.PNG, 90, out);
+                                out.close();
+                                intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(NewsDetailActivity.this, "com.java.a31", file));
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } else {
+                    intent.setType("text/plain").putExtra(Intent.EXTRA_TEXT, newsDetail.getTitle());
+                    startActivity(intent);
+                }
+            }
+        });
+
+        dialog.setContentView(view);
+        dialog.show();
     }
 }
