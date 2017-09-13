@@ -13,10 +13,10 @@ android {
     }
     signingConfigs{
         release {
-            storeFile file("key.jks")        //证书存放目录
-            storePassword "abc123456"                               //密码
-            keyAlias "key0"                                                //别名
-            keyPassword "abc123456"                                //密码(就是设置证书那两个密码，建议都填一样的)
+            storeFile file("default.keystore")        //证书存放目录
+            storePassword "android"                               //密码
+            keyAlias "androiddebugkey"                                                //别名
+            keyPassword "android"                                //密码(就是设置证书那两个密码，建议都填一样的)
         }
     }
     buildTypes {
@@ -71,6 +71,8 @@ dependencies {
     compile "com.android.support:cardview-v7:${supportLibVersion}"
     compile "com.android.support:support-v4:${supportLibVersion}"
     compile "com.android.support:preference-v14:${supportLibVersion}"
+
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
 
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'

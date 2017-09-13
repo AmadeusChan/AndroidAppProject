@@ -4,7 +4,7 @@ package com.java.a31.androidappproject.models.sharing.weibo;
  * Created by amadeus on 9/10/17.
  */
 
-public interface Constants {
+interface Constants {
     public static final String APP_KEY="2428964589";
     public static final String REDIRECT_URL = "http://www.sina.com";
     public static final String SCOPE =

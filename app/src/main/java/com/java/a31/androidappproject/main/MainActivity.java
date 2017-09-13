@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import com.java.a31.androidappproject.R;
 import com.java.a31.androidappproject.favorite.FavoriteFragment;
 import com.java.a31.androidappproject.models.NewsManager;
+import com.java.a31.androidappproject.models.sharing.wechat.Share2Wechat;
 import com.java.a31.androidappproject.news.NewsFragment;
 import com.java.a31.androidappproject.settings.SettingsFragment;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         // Initialize NewsManager::context
         NewsManager.getInstance(getApplicationContext());
+
+        NewsManager.getInstance(getApplicationContext()).share2Wechat(
+                "https://www.apple.com", "This is iPhone X", "https://cdn.vox-cdn.com/uploads/chorus_image/image/56645405/iphone_x_gallery1_2017.0.jpeg", Share2Wechat.SHARE_TO_TIMELINE
+        );
 
         new MainPresenter(this);
 

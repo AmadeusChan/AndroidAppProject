@@ -15,6 +15,7 @@ import com.java.a31.androidappproject.models.Recommendation.NewsRecommendationMa
 import com.java.a31.androidappproject.models.database.FavoriteNewsList;
 import com.java.a31.androidappproject.models.database.ImprovedFavoriteNewsList;
 import com.java.a31.androidappproject.models.database.MyDBHelper;
+import com.java.a31.androidappproject.models.sharing.wechat.Share2Wechat;
 import com.java.a31.androidappproject.models.sharing.weibo.Share2Weibo;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -102,6 +103,7 @@ public class NewsManager {
         myDBHelper=new MyDBHelper(context);
         InitImageLoader();
         Share2Weibo.init(context);
+        Share2Wechat.init(context);
     }
 
     public boolean isConnectToInternet() {
@@ -301,6 +303,10 @@ public class NewsManager {
 
     public void share2Weibo(Activity activity, String url, String introduction, String image) {
         Share2Weibo.share(activity, url, introduction, image);
+    }
+
+    public void share2Wechat(String url, String introduction, String image, int mode) {
+        Share2Wechat.share2Wechat(url, introduction, image, mode);
     }
 
     public INewsList getRecommendedNewsList(int mode) {
