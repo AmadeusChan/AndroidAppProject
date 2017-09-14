@@ -1,7 +1,5 @@
 \documentclass[UTF8]{ctexart}
 
-\usepackage{ctex}
-
 \usepackage{lmodern}
 \usepackage[Symbol]{upgreek}
 
@@ -18,8 +16,8 @@
 
 \usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
 
-%\usepackage{enumitem} % Customized lists
-%\setlist[itemize]{noitemsep} % Make itemize lists more compact
+\usepackage{enumitem} % Customized lists
+\setlist[itemize]{noitemsep} % Make itemize lists more compact
 
 \usepackage{abstract} % Allows abstract customization
 \renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
@@ -44,6 +42,9 @@
 \usepackage{titling} % Customizing the title section
 \usepackage{minted}
 
+\usepackage{float}
+\usepackage{multirow}
+\usepackage[table,xcdraw]{xcolor}
 
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION
@@ -53,7 +54,7 @@
 \setlength{\droptitle}{-1\baselineskip}
  % Article title closing formatting
 \title{\zihao{1}{2017年夏季Java小学期大作业\\ 实验报告}}
-\author{陈经基, 2015011358 \\ 高信龙一， 2015080060\\张蔚， 2015011352}
+\author{陈经基\\2015011358 \and 高信龙一\\2015080060 \and 张蔚\\2015011352}
 \date{\today} % Leave empty to omit a date
 
 %----------------------------------------------------------------------------------------
@@ -67,6 +68,77 @@
 
 \tableofcontents
 
+\section{功能实现}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|c|c|}
+\hline
+                                                                         & 功能                                                                   & 子功能                                                                                                    & 百分比   & {\color[HTML]{000000} \begin{tabular}[c]{@{}c@{}}是否\\ 实现\end{tabular}} \\ \hline
+                                                                         & 系统支持                                                                 & \begin{tabular}[c]{@{}l@{}}要保证程序在安卓机上正常运行，测试过程\\ 中程序不崩溃。\end{tabular}                                  & 5     & {\color[HTML]{FE0000} 是}                                               \\ \cline{2-5} 
+                                                                         & 页面布局                                                                 & 布局合理，点击处理正确                                                                                            & 10    & {\color[HTML]{FE0000} 是}                                               \\ \cline{2-5} 
+                                                                         & 分类列表                                                                 & 删除和添加操作                                                                                                & 10    & {\color[HTML]{FE0000} 是}                                               \\ \cline{2-5} 
+                                                                         &                                                                      & \begin{tabular}[c]{@{}l@{}}正确显示新闻列表的消息，布局和展示，点\\ 击进入新闻详情页面正确。\end{tabular}                             & 10    & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+                                                                         &                                                                      & \begin{tabular}[c]{@{}l@{}}实现新闻的本地存储，看过的新闻列表在离\\ 线的情况下也可以浏览\end{tabular}                               & 10    & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+                                                                         &                                                                      & 上拉获取更多新闻                                                                                               & 5     & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+                                                                         &                                                                      & 新闻是否看过的页面灰色标记                                                                                          & 5     & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+                                                                         & \multirow{-5}{*}{新闻列表}                                               & 新闻搜索                                                                                                   & 5     & {\color[HTML]{FE0000} 是}                                               \\ \cline{2-5} 
+                                                                         &                                                                      & \begin{tabular}[c]{@{}l@{}}使用微信、微博等 SDK分享，新闻详情页面\\ 点击分享可以分享到常用的 app，分享内容\\ 带有新闻摘要、URL 和图片\end{tabular} & 10    & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+\multirow{-10}{*}{\begin{tabular}[c]{@{}l@{}}基\\ 础\\ 功\\ 能\end{tabular}} & \multirow{-2}{*}{分享收藏}                                               & \begin{tabular}[c]{@{}l@{}}新闻详情页面点击收藏的添加和删除，实现\\ 收藏新闻的本地存储。收藏也的正确展示，\\ 点击可以进入新闻详情等\end{tabular}        & 10    & {\color[HTML]{FE0000} 是}                                               \\ \hline
+                                                                         & 新闻推荐                                                                 & \begin{tabular}[c]{@{}l@{}}根据用户看过的新闻推荐相关的新闻，参考\\ 今日头条等\end{tabular}                                    & 10    & {\color[HTML]{FE0000} 是}                                               \\ \cline{2-5} 
+                                                                         & 语音播报                                                                 & 可以语音读出新闻等                                                                                              & 20    & {\color[HTML]{FE0000} 是}                                               \\ \cline{2-5} 
+                                                                         & \begin{tabular}[c]{@{}l@{}}新闻人物\\ 地点链接\end{tabular}                  & 用户可以跳转到相应的百科词条等                                                                                        & 5     & {\color[HTML]{FE0000} 是}                                               \\ \cline{2-5} 
+                                                                         &                                                                      & \begin{tabular}[c]{@{}l@{}}新闻屏蔽功能，通过进一步询问用户想要屏\\ 蔽掉关于什么内容的新闻而实现基于关键词\\ 的屏蔽等\end{tabular}               & 5     & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+                                                                         &                                                                      & 夜间模式，用户可以调整背景色等                                                                                        & 5     & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+                                                                         &                                                                      & \begin{tabular}[c]{@{}l@{}}文字模式和图片模式转换，文字模式不显示\\ 图片，帮助用户节省流量。\end{tabular}                             & 5     & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+                                                                         &                                                                      & 流畅性强                                                                                                   & 视效果而定 & {\color[HTML]{FE0000} }                                                \\ \cline{3-5} 
+                                                                         &                                                                      & 界面颜值高                                                                                                  & 视效果而定 & {\color[HTML]{FE0000} }                                                \\ \cline{3-5} 
+                                                                         & \multirow{-6}{*}{用户体验}                                               & \begin{tabular}[c]{@{}l@{}}根据新闻文本补上相关的图片（因为部分新\\ 闻内容没有图片）\end{tabular}                                 & 视效果而定 & {\color[HTML]{FE0000} }                                                \\ \cline{2-5} 
+                                                                         &                                                                      & 使用了较好的框架                                                                                               & 酌情加分  & {\color[HTML]{FE0000} }                                                \\ \cline{3-5} 
+                                                                         &                                                                      & 有较完整的单元测试                                                                                              & 5     & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+                                                                         &                                                                      & 使用了 github 等好用的代码版本管理工具                                                                                & 2     & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+                                                                         &                                                                      & maven 或者 gradle 等项目管理工具                                                                                & 2     & {\color[HTML]{FE0000} 是}                                               \\ \cline{3-5} 
+\multirow{-14}{*}{\begin{tabular}[c]{@{}l@{}}加\\ 分\\ 功\\ 能\end{tabular}} & \multirow{-5}{*}{\begin{tabular}[c]{@{}l@{}}代码和\\ 项目管理\end{tabular}} & 其他提高编码效率的工具或操作                                                                                         & 酌情加分  & {\color[HTML]{FE0000} }                                                \\ \hline
+\end{tabular}
+\end{table}
+
+\section{小组分工}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|c|c|}
+\hline
+功能                                                                   & 子功能                                                                                                    & 百分比   & {\color[HTML]{000000} 实现人} \\ \hline
+系统支持                                                                 & \begin{tabular}[c]{@{}l@{}}要保证程序在安卓机上正常运行，测试过程\\ 中程序不崩溃。\end{tabular}                                  & 5     & {\color[HTML]{FE0000} 张三}  \\ \hline
+页面布局                                                                 & 布局合理，点击处理正确                                                                                            & 10    & {\color[HTML]{FE0000} 李四}  \\ \hline
+分类列表                                                                 & 删除和添加操作                                                                                                & 10    & {\color[HTML]{FE0000} 王五}  \\ \hline
+                                                                     & \begin{tabular}[c]{@{}l@{}}正确显示新闻列表的消息，布局和展示，点\\ 击进入新闻详情页面正确。\end{tabular}                             & 10    & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+                                                                     & \begin{tabular}[c]{@{}l@{}}实现新闻的本地存储，看过的新闻列表在离\\ 线的情况下也可以浏览\end{tabular}                               & 10    & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+                                                                     & 上拉获取更多新闻                                                                                               & 5     & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+                                                                     & 新闻是否看过的页面灰色标记                                                                                          & 5     & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+\multirow{-5}{*}{新闻列表}                                               & 新闻搜索                                                                                                   & 5     & {\color[HTML]{FE0000} 是}   \\ \hline
+                                                                     & \begin{tabular}[c]{@{}l@{}}使用微信、微博等 SDK分享，新闻详情页面\\ 点击分享可以分享到常用的 app，分享内容\\ 带有新闻摘要、URL 和图片\end{tabular} & 10    & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+\multirow{-2}{*}{分享收藏}                                               & \begin{tabular}[c]{@{}l@{}}新闻详情页面点击收藏的添加和删除，实现\\ 收藏新闻的本地存储。收藏也的正确展示，\\ 点击可以进入新闻详情等\end{tabular}        & 10    & {\color[HTML]{FE0000} 是}   \\ \hline
+新闻推荐                                                                 & \begin{tabular}[c]{@{}l@{}}根据用户看过的新闻推荐相关的新闻，参考\\ 今日头条等\end{tabular}                                    & 10    & {\color[HTML]{FE0000} 是}   \\ \hline
+语音播报                                                                 & 可以语音读出新闻等                                                                                              & 20    & {\color[HTML]{FE0000} 是}   \\ \hline
+\begin{tabular}[c]{@{}l@{}}新闻人物\\ 地点链接\end{tabular}                  & 用户可以跳转到相应的百科词条等                                                                                        & 5     & {\color[HTML]{FE0000} 是}   \\ \hline
+                                                                     & \begin{tabular}[c]{@{}l@{}}新闻屏蔽功能，通过进一步询问用户想要屏\\ 蔽掉关于什么内容的新闻而实现基于关键词\\ 的屏蔽等\end{tabular}               & 5     & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+                                                                     & 夜间模式，用户可以调整背景色等                                                                                        & 5     & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+                                                                     & \begin{tabular}[c]{@{}l@{}}文字模式和图片模式转换，文字模式不显示\\ 图片，帮助用户节省流量。\end{tabular}                             & 5     & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+                                                                     & 流畅性强                                                                                                   & 视效果而定 & {\color[HTML]{FE0000} }    \\ \cline{2-4} 
+                                                                     & 界面颜值高                                                                                                  & 视效果而定 & {\color[HTML]{FE0000} }    \\ \cline{2-4} 
+\multirow{-6}{*}{用户体验}                                               & \begin{tabular}[c]{@{}l@{}}根据新闻文本补上相关的图片（因为部分新\\ 闻内容没有图片）\end{tabular}                                 & 视效果而定 & {\color[HTML]{FE0000} }    \\ \hline
+                                                                     & 使用了较好的框架                                                                                               & 酌情加分  & {\color[HTML]{FE0000} }    \\ \cline{2-4} 
+                                                                     & 有较完整的单元测试                                                                                              & 5     & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+                                                                     & 使用了 github 等好用的代码版本管理工具                                                                                & 2     & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+                                                                     & maven 或者 gradle 等项目管理工具                                                                                & 2     & {\color[HTML]{FE0000} 是}   \\ \cline{2-4} 
+\multirow{-5}{*}{\begin{tabular}[c]{@{}l@{}}代码和\\ 项目管理\end{tabular}} & 其他提高编码效率的工具或操作                                                                                         & 酌情加分  & {\color[HTML]{FE0000} }    \\ \hline
+\end{tabular}
+\end{table}
+
+\section{具体实现}
+
+\section{总结与心得}
 
 %----------------------------------------------------------------------------------------
 

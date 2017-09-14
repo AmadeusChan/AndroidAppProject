@@ -23,9 +23,9 @@ public interface NewsDetailContract {
 
         void setUnLike();
 
-        void setBan();
+//        void setBan();
 
-        void setUnBan();
+//        void setUnBan();
 
         void share(INewsDetail newsDetail);
 

@@ -41,8 +41,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * Created by zwei on 2017/9/7.
  */

@@ -22,7 +22,7 @@ public class ChannelPresenter implements ChannelContract.Presenter {
 
     private static final String TAG = "ChannelPresenter";
 
-    ArrayList<String> mime;
+    ArrayList<String> mine;
 
     ArrayList<String> more;
 
@@ -39,11 +39,11 @@ public class ChannelPresenter implements ChannelContract.Presenter {
 
     @Override
     public void start() {
-        mime = new ArrayList<String>(mNewsManager.getCategoryList());
+        mine = new ArrayList<String>(mNewsManager.getCategoryList());
         more = new ArrayList<String>(Arrays.asList(MyDBHelper.categoryList));
-        more.removeAll(mime);
+        more.removeAll(mine);
 
-        mView.setMimeChannel(mime);
+        mView.setMineChannel(mine);
         mView.setMoreChannel(more);
     }
 
