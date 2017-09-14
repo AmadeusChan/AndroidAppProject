@@ -15,8 +15,8 @@
     <string name="settings">Settings</string>
     <string name="channel">Channel</string>
 
-    <string name="my_channel">My Channel</string>
-    <string name="more_channel">More Channel</string>
+    <string name="my_channel">我的频道</string>
+    <string name="more_channel">更多频道</string>
 
     <string name="share">Share</string>
     <string name="star">Star</string>

@@ -91,11 +91,6 @@ public class NewsDetailPresenterTest {
     }
 
     @Test
-    public void getNewsDetail() throws Exception {
-        presenter.getNewsDetail();
-    }
-
-    @Test
     public void onLikeButtonClick() throws Exception {
         presenter.onLikeButtonClick();
     }

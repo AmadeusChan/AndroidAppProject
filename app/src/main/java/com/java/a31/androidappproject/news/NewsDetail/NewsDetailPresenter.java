@@ -73,11 +73,6 @@ public class NewsDetailPresenter implements NewsDetailContract.Presenter, INewsL
     }
 
     @Override
-    public INewsDetail getNewsDetail() {
-        return mNewsDetail;
-    }
-
-    @Override
     public void onLikeButtonClick() {
         if (mNewsDetail == null) {
             return;

@@ -23,10 +23,6 @@ public interface NewsDetailContract {
 
         void setUnLike();
 
-//        void setBan();
-
-//        void setUnBan();
-
         void share(INewsDetail newsDetail);
 
     }
@@ -34,8 +30,6 @@ public interface NewsDetailContract {
     interface Presenter extends BasePresenter {
 
         void loadNewsDetail(String newsId, boolean isTextOnly);
-
-        INewsDetail getNewsDetail();
 
         void onLikeButtonClick();
 
