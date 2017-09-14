@@ -30,8 +30,6 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * Created by zwei on 2017/9/7.
  */
@@ -56,7 +54,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View,
 
     private LinearLayoutManager mLinearLayoutManager;
 
-    private SharedPreferences mSharedPreferences;
+//    private SharedPreferences mSharedPreferences;
 
     public static NewsListFragment newInstance(int category) {
         Bundle args = new Bundle();
@@ -95,32 +93,32 @@ public class NewsListFragment extends Fragment implements NewsListContract.View,
         mRecyclerView.setAdapter(mNewsListAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), mLinearLayoutManager.getOrientation()));
 
-        mSharedPreferences = view.getContext().getSharedPreferences(NewsDetailActivity.KEY_BANNED, MODE_PRIVATE);
+//        mSharedPreferences = view.getContext().getSharedPreferences(NewsDetailActivity.KEY_BANNED, MODE_PRIVATE);
 
         onRefresh();
 
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        final Set<String> banned = mSharedPreferences.getStringSet(NewsDetailActivity.KEY_BANNED, new HashSet<String>());
-        mPresenter.setFilter(new INewsFilter() {
-            @Override
-            public boolean accept(INewsIntroduction newsIntroduction) {
-                for (String keyword : banned) {
-                    if (newsIntroduction.getTitle().contains(keyword) || newsIntroduction.getIntroduction().contains(keyword)) {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        });
-
-        onRefresh();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//
+//        final Set<String> banned = mSharedPreferences.getStringSet(NewsDetailActivity.KEY_BANNED, new HashSet<String>());
+//        mPresenter.setFilter(new INewsFilter() {
+//            @Override
+//            public boolean accept(INewsIntroduction newsIntroduction) {
+//                for (String keyword : banned) {
+//                    if (newsIntroduction.getTitle().contains(keyword) || newsIntroduction.getIntroduction().contains(keyword)) {
+//                        return false;
+//                    }
+//                }
+//                return true;
+//            }
+//        });
+//
+//        onRefresh();
+//    }
 
     @Override
     public void setPresenter(@NonNull NewsListContract.Presenter presenter) {

@@ -20,10 +20,10 @@
         android:icon="@drawable/ic_keyboard_voice_white_24dp"
         android:title="@string/read" />
 
-    <item
+<!--    <item
         android:id="@+id/ban"
         app:showAsAction="always"
         android:icon="@drawable/ic_not_interested_white_24dp"
         android:title="@string/ban" />
-
+-->
 </menu>
