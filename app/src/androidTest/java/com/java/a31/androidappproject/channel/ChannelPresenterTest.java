@@ -29,7 +29,7 @@ public class ChannelPresenterTest {
             private ChannelContract.Presenter mPresenter;
 
             @Override
-            public void setMimeChannel(List<String> channelList) {
+            public void setMineChannel(List<String> channelList) {
                 System.out.print("setMimeChannel");
                 for (String channel : channelList) {
                     System.out.print(channel);

@@ -54,16 +54,6 @@ public class NewsDetailPresenterTest {
             }
 
             @Override
-            public void setBan() {
-                Log.d(TAG, "setBan");
-            }
-
-            @Override
-            public void setUnBan() {
-                Log.d(TAG, "setUnBan");
-            }
-
-            @Override
             public void share(INewsDetail newsDetail) {
                 Log.d(TAG, "share");
             }
