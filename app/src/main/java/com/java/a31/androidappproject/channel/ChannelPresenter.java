@@ -43,7 +43,7 @@ public class ChannelPresenter implements ChannelContract.Presenter {
         more = new ArrayList<String>(Arrays.asList(MyDBHelper.categoryList));
         more.removeAll(mine);
 
-        mView.setMimeChannel(mine);
+        mView.setMineChannel(mine);
         mView.setMoreChannel(more);
     }
 

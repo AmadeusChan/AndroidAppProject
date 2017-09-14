@@ -13,7 +13,7 @@ public interface ChannelContract {
 
     interface View extends BaseView<Presenter> {
 
-        void setMimeChannel(List<String> channelList);
+        void setMineChannel(List<String> channelList);
 
         void setMoreChannel(List<String> channelList);
 

@@ -88,7 +88,7 @@ public class ChannelActivity extends AppCompatActivity implements ChannelContrac
     }
 
     @Override
-    public void setMimeChannel(List<String> channelList) {
+    public void setMineChannel(List<String> channelList) {
         channelMineAdapter.setNewData(channelList);
     }
 
