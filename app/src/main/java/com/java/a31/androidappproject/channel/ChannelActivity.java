@@ -27,18 +27,18 @@ public class ChannelActivity extends AppCompatActivity implements ChannelContrac
     Toolbar mToolbar;
 
     @BindView(R.id.channel_mine)
-    RecyclerView channelMime;
+    RecyclerView channelMine;
 
     @BindView(R.id.channel_more)
     RecyclerView channelMore;
 
     private ChannelContract.Presenter mPresenter;
 
-    private ChannelListAdapter channelMimeAdapter;
+    private ChannelListAdapter channelMineAdapter;
 
     private ChannelListAdapter channelMoreAdapter;
 
-    private BaseQuickAdapter.OnItemClickListener channelMimeListener = new BaseQuickAdapter.OnItemClickListener() {
+    private BaseQuickAdapter.OnItemClickListener channelMineListener = new BaseQuickAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
             String channel = (String) adapter.getItem(position);
@@ -67,9 +67,9 @@ public class ChannelActivity extends AppCompatActivity implements ChannelContrac
         setContentView(R.layout.activity_channel);
         ButterKnife.bind(this);
 
-        channelMimeAdapter = new ChannelListAdapter();
-        initChannel(channelMime, channelMimeAdapter);
-        channelMimeAdapter.setOnItemClickListener(channelMimeListener);
+        channelMineAdapter = new ChannelListAdapter();
+        initChannel(channelMine, channelMineAdapter);
+        channelMineAdapter.setOnItemClickListener(channelMineListener);
 
         channelMoreAdapter = new ChannelListAdapter();
         initChannel(channelMore, channelMoreAdapter);
@@ -89,7 +89,7 @@ public class ChannelActivity extends AppCompatActivity implements ChannelContrac
 
     @Override
     public void setMimeChannel(List<String> channelList) {
-        channelMimeAdapter.setNewData(channelList);
+        channelMineAdapter.setNewData(channelList);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ChannelActivity extends AppCompatActivity implements ChannelContrac
 
     @Override
     public void addChannel(String channel) {
-        channelMimeAdapter.addData(channel);
+        channelMineAdapter.addData(channel);
     }
 
     @Override
