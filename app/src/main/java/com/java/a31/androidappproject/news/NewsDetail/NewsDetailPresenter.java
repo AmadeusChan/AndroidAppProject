@@ -61,7 +61,6 @@ public class NewsDetailPresenter implements NewsDetailContract.Presenter, INewsL
                 mView.setUnLike();
             }
         }
-        Log.d(TAG, "" + newsDetail.getImages().size());
     }
 
     @Override
